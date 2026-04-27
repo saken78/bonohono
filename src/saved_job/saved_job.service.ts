@@ -1,12 +1,8 @@
-import type { Context } from "hono";
 import { prismaService } from "../db/MariaDB";
 import type { GetSavedJobResultQuery } from "../job/job.model";
-import type { JWT_RESPONSE } from "../auth/auth.model";
 
 export const SavedJobService = {
-  async GetSavedJobByUserId(c: Context) {
-    const user = c.get("user");
-    console.log(user);
+  async GetSavedJobByUserId(id: string) {
     const saved_job = await prismaService.$queryRaw<GetSavedJobResultQuery>`
     SELECT
     sj.id as saved_job_id,
@@ -40,24 +36,20 @@ FROM
     JOIN jobs as j ON sj.job_id = j.id
     JOIN users as u ON j.poster_id = u.id
 WHERE
-    sj.user_id = ${user.id}
+    sj.user_id = ${id}
 ORDER BY sj.created_at DESC`;
     return saved_job;
   },
-  async CreateSavedJob(c: Context, job_id: string) {
-    const user: JWT_RESPONSE = c.get("user");
-    const id = user.id;
+  async CreateSavedJob(user_id: string, job_id: string) {
     const job = await prismaService.saved_jobs.create({
-      data: { user_id: id, job_id: job_id },
+      data: { user_id: user_id, job_id: job_id },
       select: { job_id: true },
     });
     return job;
   },
-  async DeleteSavedJob(c: Context): Promise<void> {
-    const jobs = await c.req.json();
-    const user: JWT_RESPONSE = c.get("user");
+  async DeleteSavedJob(user_id: string, job_id: string): Promise<void> {
     await prismaService.$executeRaw`
-    DELETE from saved_jobs where job_id = ${jobs.job_id} 
-    AND user_id = ${user.id}`;
+    DELETE from saved_jobs where job_id = ${job_id} 
+    AND user_id = ${user_id}`;
   },
 };
