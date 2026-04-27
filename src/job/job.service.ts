@@ -1,4 +1,3 @@
-import type { Context } from "hono";
 import { prismaService } from "../db/MariaDB";
 import {
   REGISTER_JOB_SCHEMA,

@@ -56,27 +56,6 @@ export const GET_JOB_ID_SCHEMA = z.object({
   id: z.string(),
 });
 
-export type GetSavedJobResultQuery = {
-  saved_job_id: string;
-  user_id: string;
-  job_id: string;
-  saved_at: Date;
-  id: string;
-  poster_id: string;
-  title: string;
-  description: string;
-  category_id: string;
-  budget: Decimal;
-  status: jobs_status;
-  deadline: Date | null;
-  location: string | null;
-  created_at: Date | null;
-  updated_at: Date | null;
-  name: string;
-  poster_email: string;
-  poster_avatar: string | null;
-};
-
 export type GET_JOB_BY_CATEGORY_REQUEST = {
   category_id: string;
 };
