@@ -1,13 +1,13 @@
 import { prismaService } from "../db/MariaDB";
 import {
   type JWT_PAYLOAD,
-  type LOGIN_USER_REQUEST,
-  type REGISTER_USER_REQUEST,
+  type LoginUserRequest,
+  type RegisterUserRequest,
+  type AuthResponse,
   REGISTER_SCHEMA,
-  type RESET_PASSWORD_REQUEST,
-  type UserResponse,
   LOGIN_SCHEMA,
   RESET_PASSWORD_SCHEMA,
+  DELETE_SCHEMA,
 } from "./auth.model";
 import { HttpStatus } from "../utils/status_code";
 import { HTTPException } from "hono/http-exception";
@@ -17,7 +17,7 @@ import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie";
 import type { Context } from "hono";
 
 export const authService = {
-  async register(req: REGISTER_USER_REQUEST): Promise<UserResponse> {
+  async register(req: RegisterUserRequest): Promise<AuthResponse> {
     const request = REGISTER_SCHEMA.parse(req);
 
     const password = await Bun.password.hash(request.password, {
@@ -40,7 +40,7 @@ export const authService = {
       email: user.email,
     };
   },
-  async login(req: LOGIN_USER_REQUEST, c: Context): Promise<UserResponse> {
+  async login(req: LoginUserRequest, c: Context): Promise<AuthResponse> {
     const request = LOGIN_SCHEMA.parse(req);
 
     if (!SECRET || SECRET === undefined) {
@@ -104,11 +104,8 @@ export const authService = {
     }
     deleteCookie(c, "refresh_token");
   },
-  async resetPassword(
-    req: RESET_PASSWORD_REQUEST,
-    email: string,
-  ): Promise<void> {
-    const request = RESET_PASSWORD_SCHEMA.parse(req);
+  async resetPassword(password: string, email: string): Promise<void> {
+    const request = RESET_PASSWORD_SCHEMA.parse(password);
 
     const npw = await Bun.password.hash(request.password, {
       algorithm: "argon2id",
@@ -122,11 +119,14 @@ export const authService = {
     });
   },
   async deleteAccount(email: string): Promise<void> {
-    if (!email) {
+    const validatet_email = DELETE_SCHEMA.parse(email);
+    if (!validatet_email.email) {
       throw new HTTPException(HttpStatus.UNAUTHORIZED, {
         message: "Unauthorized",
       });
     }
-    await prismaService.users.delete({ where: { email: email } });
+    await prismaService.users.delete({
+      where: { email: validatet_email.email },
+    });
   },
 };

@@ -6,7 +6,8 @@ export const REGISTER_SCHEMA = z.object({
   first_name: z.string().min(4).max(100),
   last_name: z.string().min(4).max(100).nullable(),
 });
-export type REGISTER_USER_REQUEST = {
+
+export type RegisterUserRequest = {
   email: string;
   password: string;
   first_name: string;
@@ -17,16 +18,17 @@ export const LOGIN_SCHEMA = z.object({
   email: z.string().email().min(1).max(100),
   password: z.string().min(8).max(100),
 });
-export type LOGIN_USER_REQUEST = {
+
+export type LoginUserRequest = {
   email: string;
   password: string;
 };
 
 export const RESET_PASSWORD_SCHEMA = z.object({
-  email: z.string().email().min(1).max(100),
   password: z.string().min(8).max(100),
 });
-export type RESET_PASSWORD_REQUEST = {
+
+export type ResetPasswordRequest = {
   password: string;
 };
 
@@ -35,17 +37,12 @@ export const DELETE_SCHEMA = z.object({
 });
 
 // RESPONSE
-export type UserResponse = {
+export type AuthResponse = {
   email: string;
   first_name?: string;
 };
 
-export type UserResponseController = {
-  data: UserResponse;
-  status_code: number;
-};
-
-export type UserResponseQuery = {
+export type AuthResponseQuery = {
   email: string;
   first_name: string;
 };

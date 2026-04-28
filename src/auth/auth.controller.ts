@@ -2,27 +2,25 @@ import { Hono, type Context } from "hono";
 import { authService } from "./auth.service";
 import {
   type JWT_RESPONSE,
-  type LOGIN_USER_REQUEST,
-  type REGISTER_USER_REQUEST,
-  type RESET_PASSWORD_REQUEST,
-  type UserResponseController,
+  type LoginUserRequest,
+  type RegisterUserRequest,
+  type ResetPasswordRequest,
 } from "./auth.model";
 import { HttpStatus } from "../utils/status_code";
 import { AuthMiddleware } from "../middleware/auth.middleware";
-import { HTTPException } from "hono/http-exception";
 
 export const authController = new Hono();
 authController.post("/", async (c: Context) => {
-  const body: REGISTER_USER_REQUEST = await c.req.json();
+  const body: RegisterUserRequest = await c.req.json();
   const result = await authService.register(body);
   c.status(HttpStatus.CREATED);
-  return c.json<UserResponseController>({
+  return c.json({
     data: result,
     status_code: HttpStatus.CREATED,
   });
 });
 authController.post("/login", async (c: Context) => {
-  const body: LOGIN_USER_REQUEST = await c.req.json();
+  const body: LoginUserRequest = await c.req.json();
   const result = await authService.login(body, c);
   return c.json({
     data: result,
@@ -38,13 +36,8 @@ authController.get("/me", async (c: Context) => {
 });
 authController.patch("/current", async (c: Context) => {
   const user: JWT_RESPONSE = c.get("user");
-  if (!user) {
-    throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-      message: "UNAUTHORIZED",
-    });
-  }
-  const body: RESET_PASSWORD_REQUEST = await c.req.json();
-  await authService.resetPassword(body, user.email);
+  const body: ResetPasswordRequest = await c.req.json();
+  await authService.resetPassword(body.password, user.email);
   return c.json({
     message: "Pasword changed succesfully",
     status_code: HttpStatus.OK,
