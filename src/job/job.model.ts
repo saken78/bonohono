@@ -8,19 +8,10 @@ import {
 } from "../../generated/prisma/enums";
 import z from "zod";
 
-export type REGISTER_JOB = {
-  poster_id: string;
-  title: string;
-  budget: Decimal;
-  description: string;
-  category_id: string;
-  status: jobs_status;
-  deadline: Date;
-  location: string;
-  work_type?: jobs_work_type;
-  commitment: jobs_commitment;
-};
-
+export const GET_JOB_BY_CATEGORY_SCHEMA = z.object({
+  category_id: z.string().min(3),
+});
+export const GET_JOB_ID_SCHEMA = z.string();
 export const REGISTER_JOB_SCHEMA = z.object({
   title: z.string().min(2).max(100),
   budget: z.number().positive(),
@@ -33,7 +24,24 @@ export const REGISTER_JOB_SCHEMA = z.object({
   commitment: z.enum(jobs_commitment),
 });
 
-export type GetJobResult = {
+export type RegisterJobRequest = {
+  poster_id: string;
+  title: string;
+  budget: Decimal;
+  description: string;
+  category_id: string;
+  status: jobs_status;
+  deadline: Date;
+  location: string;
+  work_type?: jobs_work_type;
+  commitment: jobs_commitment;
+};
+
+export type GetJobByCategoryRequest = {
+  category_id: string;
+};
+
+export type GetJobResponse = {
   id: string;
   poster_id: string;
   title: string;
@@ -91,13 +99,3 @@ export type GetIdCancelledJobControllerResponse<T> = {
   data: T;
   status_code: number;
 };
-
-export const GET_JOB_ID_SCHEMA = z.string();
-
-export type GET_JOB_BY_CATEGORY_REQUEST = {
-  category_id: string;
-};
-
-export const GET_JOB_BY_CATEGORY_SCHEMA = z.object({
-  category_id: z.string().min(3),
-});

@@ -14,8 +14,8 @@ import type {
   GetIdJobControllerResponse,
   GetIdOpenJobControllerResponse,
   GetIdReadyForPaymentJobControllerResponse,
-  GetJobResult,
-  REGISTER_JOB,
+  GetJobResponse,
+  RegisterJobRequest,
 } from "./job.model";
 
 export const JobController = new Hono();
@@ -26,13 +26,13 @@ JobController.post(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      CreateJobControllerResponse<GetJobResult>,
+      CreateJobControllerResponse<GetJobResponse>,
       HttpStatus.CREATED
     >
   > => {
     const user: JWT_RESPONSE = c.get("user");
-    const body: REGISTER_JOB = await c.req.json();
-    const result: GetJobResult = await JobService.PostJob(body, user.id);
+    const body: RegisterJobRequest = await c.req.json();
+    const result: GetJobResponse = await JobService.PostJob(body, user.id);
     return c.json({
       data: result,
       status_code: HttpStatus.CREATED,
@@ -45,11 +45,11 @@ JobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetAllJobControllerResponse<GetJobResult[]>,
+      GetAllJobControllerResponse<GetJobResponse[]>,
       HttpStatus.OK
     >
   > => {
-    const result: GetJobResult[] = await JobService.GetAllJob();
+    const result: GetJobResponse[] = await JobService.GetAllJob();
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -62,7 +62,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<GetIdJobControllerResponse<GetJobResult>, HttpStatus.OK>
+    JSONRespondReturn<GetIdJobControllerResponse<GetJobResponse>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -72,7 +72,7 @@ JobController.get(
     }
     // console.dir(c.var, { depth: null });
     // console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(c)));
-    const result: GetJobResult = await JobService.GetJobById(id);
+    const result: GetJobResponse = await JobService.GetJobById(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -85,7 +85,7 @@ JobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetIdCompletedJobControllerResponse<GetJobResult[]>,
+      GetIdCompletedJobControllerResponse<GetJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -95,7 +95,8 @@ JobController.get(
         message: "Param not found",
       });
     }
-    const result: GetJobResult[] = await JobService.GetJobCompleteByUserId(id);
+    const result: GetJobResponse[] =
+      await JobService.GetJobCompleteByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -108,7 +109,7 @@ JobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetIdOpenJobControllerResponse<GetJobResult[]>,
+      GetIdOpenJobControllerResponse<GetJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -118,7 +119,7 @@ JobController.get(
         message: "Param not found",
       });
     }
-    const result: GetJobResult[] = await JobService.GetJobOpenByUserId(id);
+    const result: GetJobResponse[] = await JobService.GetJobOpenByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -131,7 +132,7 @@ JobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetIdInProgressJobControllerResponse<GetJobResult[]>,
+      GetIdInProgressJobControllerResponse<GetJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -141,7 +142,7 @@ JobController.get(
         message: "Param not found",
       });
     }
-    const result: GetJobResult[] =
+    const result: GetJobResponse[] =
       await JobService.GetJobInProgressByUserId(id);
     return c.json({
       data: result,
@@ -155,7 +156,7 @@ JobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetIdReadyForPaymentJobControllerResponse<GetJobResult[]>,
+      GetIdReadyForPaymentJobControllerResponse<GetJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -165,7 +166,7 @@ JobController.get(
         message: "Param not found",
       });
     }
-    const result: GetJobResult[] =
+    const result: GetJobResponse[] =
       await JobService.GetJobReadyForPaymentByUserId(id);
     return c.json({
       data: result,
@@ -179,7 +180,7 @@ JobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetIdCancelledJobControllerResponse<GetJobResult[]>,
+      GetIdCancelledJobControllerResponse<GetJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -189,7 +190,8 @@ JobController.get(
         message: "Param not found",
       });
     }
-    const result: GetJobResult[] = await JobService.GetJobCancelledByUserId(id);
+    const result: GetJobResponse[] =
+      await JobService.GetJobCancelledByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,

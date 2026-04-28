@@ -1,8 +1,8 @@
 import { prismaService } from "../db/MariaDB";
 import {
+  type RegisterJobRequest,
+  type GetJobResponse,
   REGISTER_JOB_SCHEMA,
-  type REGISTER_JOB,
-  type GetJobResult,
   GET_JOB_ID_SCHEMA,
 } from "./job.model";
 import { winstonlogger } from "../utils/winston-logger";
@@ -10,7 +10,7 @@ import { HTTPException } from "hono/http-exception";
 import { HttpStatus } from "../utils/status_code";
 
 export const JobService = {
-  async GetAllJob(): Promise<GetJobResult[]> {
+  async GetAllJob(): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       select: {
         id: true,
@@ -73,11 +73,14 @@ export const JobService = {
 
     return result;
   },
-  async PostJob(req: REGISTER_JOB, userId: string): Promise<GetJobResult> {
+  async PostJob(
+    req: RegisterJobRequest,
+    user_id: string,
+  ): Promise<GetJobResponse> {
     const request = REGISTER_JOB_SCHEMA.parse(req);
     const job = await prismaService.jobs.create({
       data: {
-        poster_id: userId,
+        poster_id: user_id,
         title: request.title,
         budget: request.budget,
         description: request.description,
@@ -108,7 +111,7 @@ export const JobService = {
       updated_at: job.updated_at,
     };
   },
-  async GetJobById(raw_id: string): Promise<GetJobResult> {
+  async GetJobById(raw_id: string): Promise<GetJobResponse> {
     const id = GET_JOB_ID_SCHEMA.parse(raw_id);
     winstonlogger.debug("executed: ");
     const jobs = await prismaService.jobs.findUnique({
@@ -156,7 +159,7 @@ export const JobService = {
       updated_at: jobs.updated_at,
     };
   },
-  async GetJobCompleteByUserId(id: string): Promise<GetJobResult[]> {
+  async GetJobCompleteByUserId(id: string): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       where: {
         poster_id: id,
@@ -187,7 +190,7 @@ export const JobService = {
     });
     return jobs;
   },
-  async GetJobOpenByUserId(id: string): Promise<GetJobResult[]> {
+  async GetJobOpenByUserId(id: string): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       where: {
         poster_id: id,
@@ -218,7 +221,7 @@ export const JobService = {
     });
     return jobs;
   },
-  async GetJobInProgressByUserId(id: string): Promise<GetJobResult[]> {
+  async GetJobInProgressByUserId(id: string): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       where: {
         poster_id: id,
@@ -249,7 +252,7 @@ export const JobService = {
     });
     return jobs;
   },
-  async GetJobReadyForPaymentByUserId(id: string): Promise<GetJobResult[]> {
+  async GetJobReadyForPaymentByUserId(id: string): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       where: {
         poster_id: id,
@@ -280,7 +283,7 @@ export const JobService = {
     });
     return jobs;
   },
-  async GetJobCancelledByUserId(id: string): Promise<GetJobResult[]> {
+  async GetJobCancelledByUserId(id: string): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       where: {
         poster_id: id,
