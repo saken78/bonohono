@@ -35,7 +35,8 @@ ORDER BY sj.created_at DESC`;
     user_id: string,
     job_id: string,
   ): Promise<GetSavedJobResult[]> {
-    const jobs = await prismaService.$queryRaw<GetSavedJobResult[]>`SELECT
+    const jobs = await prismaService.$queryRaw<GetSavedJobResult[]>`
+SELECT
     sj.id as saved_job_id, sj.user_id, sj.job_id, sj.created_at as saved_at, 
     j.id, j.poster_id, j.title, j.description, j.category_id, j.budget, j.status, 
     j.deadline, j.location, j.created_at, j.updated_at,
