@@ -8,7 +8,11 @@ export type AllUserResponse = {
   first_name: string;
   poster: number | null;
 };
-
-export type Pageable<T> = {
-  data: Array<T>;
+export type GetAllUserControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+export type GetUserByIdControllerResponse<T> = {
+  data: T;
+  status_code: number;
 };
