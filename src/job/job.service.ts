@@ -3,6 +3,7 @@ import {
   REGISTER_JOB_SCHEMA,
   type REGISTER_JOB,
   type GetJobResult,
+  GET_JOB_ID_SCHEMA,
 } from "./job.model";
 import { winstonlogger } from "../utils/winston-logger";
 import { HTTPException } from "hono/http-exception";
@@ -36,7 +37,7 @@ export const JobService = {
     });
     return jobs;
   },
-  async GetJobIdWhereCategory(req: string) {
+  async GetJobIdWhereCategory(id: string) {
     const result = await prismaService.jobs.findMany({
       select: {
         title: true,
@@ -57,7 +58,7 @@ export const JobService = {
           },
         },
       },
-      where: { category_id: req },
+      where: { category_id: id },
       take: 20,
       orderBy: {
         created_at: "desc",
@@ -107,7 +108,8 @@ export const JobService = {
       updated_at: job.updated_at,
     };
   },
-  async GetJobById(id: string): Promise<GetJobResult> {
+  async GetJobById(raw_id: string): Promise<GetJobResult> {
+    const id = GET_JOB_ID_SCHEMA.parse(raw_id);
     winstonlogger.debug("executed: ");
     const jobs = await prismaService.jobs.findUnique({
       where: { id: id },
