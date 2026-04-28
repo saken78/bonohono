@@ -19,7 +19,7 @@ import type {
 } from "./job.model";
 
 export const JobController = new Hono();
-JobController.use(AuthMiddleware);
+JobController.use("*", AuthMiddleware);
 JobController.post(
   "/",
   async (
@@ -31,11 +31,6 @@ JobController.post(
     >
   > => {
     const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "UNAUTHORIZED",
-      });
-    }
     const body: REGISTER_JOB = await c.req.json();
     const result: GetJobResult = await JobService.PostJob(body, user.id);
     return c.json({
@@ -54,12 +49,6 @@ JobController.get(
       HttpStatus.OK
     >
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Unauthorized",
-      });
-    }
     const result: GetJobResult[] = await JobService.GetAllJob();
     return c.json({
       data: result,
@@ -75,12 +64,6 @@ JobController.get(
   ): Promise<
     JSONRespondReturn<GetIdJobControllerResponse<GetJobResult>, HttpStatus.OK>
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
@@ -106,12 +89,6 @@ JobController.get(
       HttpStatus.OK
     >
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
@@ -135,12 +112,6 @@ JobController.get(
       HttpStatus.OK
     >
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
@@ -164,12 +135,6 @@ JobController.get(
       HttpStatus.OK
     >
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
@@ -194,12 +159,6 @@ JobController.get(
       HttpStatus.OK
     >
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
@@ -224,12 +183,6 @@ JobController.get(
       HttpStatus.OK
     >
   > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
