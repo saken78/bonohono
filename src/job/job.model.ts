@@ -52,9 +52,47 @@ export type GetJobResult = {
   skills: string | null;
 };
 
-export const GET_JOB_ID_SCHEMA = z.object({
-  id: z.string(),
-});
+export type CreateJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetAllJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetIdJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetIdCompletedJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetIdOpenJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetIdInProgressJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetIdReadyForPaymentJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type GetIdCancelledJobControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export const GET_JOB_ID_SCHEMA = z.string();
 
 export type GET_JOB_BY_CATEGORY_REQUEST = {
   category_id: string;
@@ -63,8 +101,3 @@ export type GET_JOB_BY_CATEGORY_REQUEST = {
 export const GET_JOB_BY_CATEGORY_SCHEMA = z.object({
   category_id: z.string().min(3),
 });
-
-export type LOGIN_USER_REQUEST = {
-  email: string;
-  password: string;
-};
