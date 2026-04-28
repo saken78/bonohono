@@ -9,7 +9,7 @@ import type {
   DeleteJobRequest,
   DeleteSavedJobController,
   GetSavedJobByUserIdController,
-  GetSavedJobResult,
+  GetSavedJobResponse,
 } from "./saved_job.model";
 import type { JWT_RESPONSE } from "../auth/auth.model";
 import { HTTPException } from "hono/http-exception";
@@ -56,7 +56,7 @@ SavedJobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetSavedJobByUserIdController<GetSavedJobResult[]>,
+      GetSavedJobByUserIdController<GetSavedJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -66,7 +66,7 @@ SavedJobController.get(
         message: "UNAUTHORIZED",
       });
     }
-    const result: GetSavedJobResult[] =
+    const result: GetSavedJobResponse[] =
       await SavedJobService.GetSavedJobByUserId(user.id);
     return c.json({
       data: result,

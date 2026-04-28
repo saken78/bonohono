@@ -9,7 +9,7 @@ export type DeleteJobRequest = {
   job_id: string;
 };
 
-export type GetSavedJobResult = {
+export type GetSavedJobResponse = {
   saved_job_id: string;
   user_id: string;
   job_id: string;
