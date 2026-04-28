@@ -1,3 +1,4 @@
 # Bono Backend
 
-![Architecture](graph.png)
+![Architecture](graph.svg)
+
