@@ -1,5 +1,14 @@
 import type { Decimal } from "@prisma/client/runtime/index-browser";
 import type { jobs_status } from "../../generated/prisma/enums";
+import { z } from "@hono/zod-openapi";
+
+export const CREATE_JOB_SCHEMA = {
+  job_id: z.string().min(1),
+};
+
+export const DELETE_JOB_SCHEMA = {
+  job_id: z.string().min(1),
+};
 
 export type CreateJobRequest = {
   job_id: string;

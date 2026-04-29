@@ -6,7 +6,7 @@ import {
   jobs_status,
   jobs_work_type,
 } from "../../generated/prisma/enums";
-import z from "zod";
+import { z } from "@hono/zod-openapi";
 
 export const GET_JOB_BY_CATEGORY_SCHEMA = z.object({
   category_id: z.string().min(3),
