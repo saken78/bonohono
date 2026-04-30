@@ -4,16 +4,22 @@
     "start": "bun run --hot src/index.ts",
     "start:hard": "bun run --watch src/index.ts",
     "check": "tsc --noEmit",
-    "test": "bun test"
+    "test": "bun test",
+    "docs": "bunx @rcmade/hono-docs generate --config ./hono-docs.ts"
   },
   "dependencies": {
+    "@hono/standard-validator": "^0.2.2",
+    "@hono/zod-openapi": "^1.3.0",
     "@prisma/adapter-mariadb": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "@scalar/hono-api-reference": "^0.10.11",
     "hono": "^4.12.14",
+    "hono-openapi": "^1.3.0",
     "winston": "^3.19.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@rcmade/hono-docs": "^1.0.32",
     "@types/bun": "^1.3.12",
     "prisma": "^7.7.0"
   },
