@@ -9,7 +9,7 @@ import {
 import { HttpStatus } from "../utils/status_code";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 
-export const authController = new Hono();
+const authController = new Hono();
 authController.post("/", async (c: Context) => {
   const body: RegisterUserRequest = await c.req.json();
   const result = await authService.register(body);
@@ -39,7 +39,7 @@ authController.patch("/current", async (c: Context) => {
   const body: ResetPasswordRequest = await c.req.json();
   await authService.resetPassword(body.password, user.email);
   return c.json({
-    message: "Pasword changed succesfully",
+    message: "Password changed succesfully",
     status_code: HttpStatus.OK,
   });
 });
@@ -58,3 +58,4 @@ authController.delete("/delete_account", async (c: Context) => {
     status_code: HttpStatus.OK,
   });
 });
+export default authController;
