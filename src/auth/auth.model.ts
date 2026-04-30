@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "@hono/zod-openapi";
 
 export const REGISTER_SCHEMA = z.object({
   email: z.string().email().min(1).max(100),
@@ -39,7 +39,12 @@ export const DELETE_SCHEMA = z.object({
 // RESPONSE
 export type AuthResponse = {
   email: string;
-  first_name?: string;
+  first_name: string;
+};
+
+export const AUTH_RESPONSE_SCHEMA = {
+  email: z.string().openapi("example@gmail.com"),
+  first_name: z.string().openapi("example"),
 };
 
 export type AuthResponseQuery = {
