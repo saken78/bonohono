@@ -11,7 +11,7 @@ import type {
 import type { JSONRespondReturn } from "../utils/json.ts";
 
 export const userController = new Hono();
-userController.use(AuthMiddleware);
+userController.use("*", AuthMiddleware);
 userController.get(
   "/",
   async (
