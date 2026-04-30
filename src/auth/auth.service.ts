@@ -33,11 +33,12 @@ export const authService = {
         first_name: request.first_name,
         last_name: request.last_name ?? null,
       },
-      select: { email: true },
+      select: { email: true, first_name: true },
     });
 
     return {
       email: user.email,
+      first_name: user.first_name,
     };
   },
   async login(req: LoginUserRequest, c: Context): Promise<AuthResponse> {
