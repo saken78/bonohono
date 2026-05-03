@@ -15,7 +15,7 @@ import type { JWT_RESPONSE } from "../auth/auth.model";
 import { HTTPException } from "hono/http-exception";
 import type { JSONRespondReturn } from "../utils/json";
 
-export const SavedJobController = new Hono();
+const SavedJobController = new Hono();
 SavedJobController.use("*", AuthMiddleware);
 SavedJobController.post(
   "/",
@@ -98,3 +98,5 @@ SavedJobController.delete(
     });
   },
 );
+
+export default SavedJobController;

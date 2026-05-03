@@ -18,7 +18,7 @@ import type {
   RegisterJobRequest,
 } from "./job.model";
 
-export const JobController = new Hono();
+const JobController = new Hono();
 JobController.use("*", AuthMiddleware);
 JobController.post(
   "/",
@@ -219,3 +219,5 @@ JobController.get(
 //     status_code: HttpStatus.OK,
 //   });
 // });
+
+export default JobController;
