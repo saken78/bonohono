@@ -10,9 +10,9 @@ import type {
 } from "./user.model.ts";
 import type { JSONRespondReturn } from "../utils/json.ts";
 
-export const userController = new Hono();
-userController.use("*", AuthMiddleware);
-userController.get(
+const UserController = new Hono();
+UserController.use("*", AuthMiddleware);
+UserController.get(
   "/",
   async (
     c: Context,
@@ -29,7 +29,7 @@ userController.get(
     });
   },
 );
-userController.get(
+UserController.get(
   "/:id",
   async (
     c: Context,
@@ -52,3 +52,5 @@ userController.get(
     });
   },
 );
+
+export default UserController;

@@ -9,8 +9,8 @@ import {
 import { HttpStatus } from "../utils/status_code";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 
-const authController = new Hono();
-authController.post("/", async (c: Context) => {
+const AuthController = new Hono();
+AuthController.post("/", async (c: Context) => {
   const body: RegisterUserRequest = await c.req.json();
   const result = await authService.register(body);
   c.status(HttpStatus.CREATED);
@@ -19,7 +19,7 @@ authController.post("/", async (c: Context) => {
     status_code: HttpStatus.CREATED,
   });
 });
-authController.post("/login", async (c: Context) => {
+AuthController.post("/login", async (c: Context) => {
   const body: LoginUserRequest = await c.req.json();
   const result = await authService.login(body, c);
   return c.json({
@@ -27,14 +27,14 @@ authController.post("/login", async (c: Context) => {
     status_code: HttpStatus.OK,
   });
 });
-authController.use(AuthMiddleware);
-authController.get("/me", async (c: Context) => {
+AuthController.use(AuthMiddleware);
+AuthController.get("/me", async (c: Context) => {
   const result = await authService.me(c);
   return c.json({
     data: result.data,
   });
 });
-authController.patch("/current", async (c: Context) => {
+AuthController.patch("/current", async (c: Context) => {
   const user: JWT_RESPONSE = c.get("user");
   const body: ResetPasswordRequest = await c.req.json();
   await authService.resetPassword(body.password, user.email);
@@ -43,14 +43,14 @@ authController.patch("/current", async (c: Context) => {
     status_code: HttpStatus.OK,
   });
 });
-authController.delete("/current", async (c: Context) => {
+AuthController.delete("/current", async (c: Context) => {
   await authService.logout(c);
   return c.json({
     message: "Cookies cleared succesfully",
     status_code: HttpStatus.OK,
   });
 });
-authController.delete("/delete_account", async (c: Context) => {
+AuthController.delete("/delete_account", async (c: Context) => {
   const user: JWT_RESPONSE = c.get("user");
   await authService.deleteAccount(user.email);
   return c.json({
@@ -58,4 +58,4 @@ authController.delete("/delete_account", async (c: Context) => {
     status_code: HttpStatus.OK,
   });
 });
-export default authController;
+export default AuthController;

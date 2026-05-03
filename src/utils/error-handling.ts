@@ -14,7 +14,7 @@ type Failure<T> = {
 
 export type Result<T, E = Error | HTTPException> = Success<T> | Failure<E>;
 
-const CustomError = async (err: unknown, c: Context) => {
+const GlobalError = async (err: unknown, c: Context) => {
   if (err instanceof HTTPException) {
     c.status(err.status);
     return c.json({
@@ -52,4 +52,4 @@ const CustomError = async (err: unknown, c: Context) => {
   });
 };
 
-export default CustomError;
+export default GlobalError;
