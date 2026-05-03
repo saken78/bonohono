@@ -4,8 +4,7 @@
     "start": "bun run --hot src/index.ts",
     "start:hard": "bun run --watch src/index.ts",
     "check": "tsc --noEmit",
-    "test": "bun test",
-    "docs": "bunx @rcmade/hono-docs generate --config ./hono-docs.ts"
+    "test": "bun test"
   },
   "dependencies": {
     "@hono/standard-validator": "^0.2.2",
