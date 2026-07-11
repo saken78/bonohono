@@ -1,20 +1,21 @@
-import { prismaService } from "../db/MariaDB";
-import {
-  type JWT_PAYLOAD,
-  type LoginUserRequest,
-  type RegisterUserRequest,
-  type AuthResponse,
-  REGISTER_SCHEMA,
-  LOGIN_SCHEMA,
-  RESET_PASSWORD_SCHEMA,
-  DELETE_SCHEMA,
-} from "./auth.model";
-import { HttpStatus } from "../utils/status_code";
+import type { Context } from "hono";
+import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import { sign } from "hono/jwt";
+import { prismaService } from "../db/MariaDB";
 import { SECRET } from "../utils/secret";
-import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie";
-import type { Context } from "hono";
+import { HttpStatus } from "../utils/status_code";
+import {
+  type AuthResponse,
+  DELETE_SCHEMA,
+  type JWT_PAYLOAD,
+  type JWT_RESPONSE,
+  LOGIN_SCHEMA,
+  type LoginUserRequest,
+  REGISTER_SCHEMA,
+  type RegisterUserRequest,
+  RESET_PASSWORD_SCHEMA,
+} from "./auth.model";
 
 export const authService = {
   async register(req: RegisterUserRequest): Promise<AuthResponse> {
@@ -90,11 +91,9 @@ export const authService = {
       email: result.email,
     };
   },
-  async me(c: Context): Promise<{ data: JWT_PAYLOAD }> {
+  async me(c: Context): Promise<JWT_RESPONSE> {
     const result = c.get("user");
-    return {
-      data: result,
-    };
+    return result;
   },
   async logout(c: Context): Promise<void> {
     const cookie = await getSignedCookie(c, SECRET, "refresh_token");

@@ -2,6 +2,7 @@ import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
 import { Prisma } from "../../generated/prisma/client";
 import { type Context } from "hono";
+
 type Success<T> = {
   data: T;
   error: null;
