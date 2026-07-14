@@ -1,10 +1,10 @@
 import { HTTPException } from "hono/http-exception";
 import { prismaService } from "../db/MariaDB";
-import type { AllUserResponse, UserResponse } from "./user.model";
+import type { UserResponse } from "./user.model";
 import { HttpStatus } from "../utils/status_code";
 
 export const userService = {
-  async getAllUser(): Promise<AllUserResponse[]> {
+  async getAllUser(): Promise<UserResponse[]> {
     const result = await prismaService.users.findMany({
       select: { email: true, first_name: true, poster: true },
     });
@@ -16,7 +16,7 @@ export const userService = {
       select: { email: true, first_name: true, poster: true },
     });
     if (!result) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
         message: "User with this id not found",
       });
     }

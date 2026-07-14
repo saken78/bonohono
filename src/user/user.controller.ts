@@ -39,7 +39,7 @@ UserController.get(
       HttpStatus.OK
     >
   > => {
-    const id: string | undefined = c.req.param("id");
+    const id = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
         message: "param id not found",
