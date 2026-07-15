@@ -13,7 +13,6 @@ const AuthController = new Hono();
 AuthController.post("/", async (c: Context) => {
   const body: RegisterUserRequest = await c.req.json();
   const result = await authService.register(body);
-  c.status(HttpStatus.CREATED);
   return c.json({
     data: result,
     status_code: HttpStatus.CREATED,
@@ -31,7 +30,7 @@ AuthController.use(AuthMiddleware);
 AuthController.get("/me", async (c: Context) => {
   const result = await authService.me(c);
   return c.json({
-    data: result.data,
+    data: result,
   });
 });
 AuthController.patch("/current", async (c: Context) => {
