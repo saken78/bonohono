@@ -3,10 +3,10 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../../generated/prisma/client";
 
 const adapter = new PrismaMariaDb({
-  host: Bun.env["DATABASE_HOST"] as string,
-  user: Bun.env["DATABASE_USER"] as string,
-  password: Bun.env["DATABASE_PASSWORD"] as string,
-  database: Bun.env["DATABASE_NAME"] as string,
+  host: Bun.env.DATABASE_HOST,
+  user: Bun.env.DATABASE_USER,
+  password: Bun.env.PASSWORD,
+  database: Bun.env.DATABASE_NAME,
   connectionLimit: 20,
 });
 

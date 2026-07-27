@@ -1,12 +1,12 @@
 import { prismaService } from "../db/MariaDB";
 import type {
   CreateSavedJobResponse,
-  GetSavedJobResult,
+  GetSavedJobResponse,
 } from "./saved_job.model";
 
 export const SavedJobService = {
-  async GetSavedJobByUserId(user_id: string): Promise<GetSavedJobResult[]> {
-    const saved_job = await prismaService.$queryRaw<GetSavedJobResult[]>`
+  async GetSavedJobByUserId(user_id: string): Promise<GetSavedJobResponse[]> {
+    const saved_job = await prismaService.$queryRaw<GetSavedJobResponse[]>`
     SELECT
     sj.id as saved_job_id, sj.user_id, sj.job_id, sj.created_at as saved_at, 
     j.id, j.poster_id, j.title, j.description, j.category_id, j.budget, j.status, 
@@ -34,8 +34,8 @@ ORDER BY sj.created_at DESC`;
   async GetSavedJobByUserIdAndJobId(
     user_id: string,
     job_id: string,
-  ): Promise<GetSavedJobResult[]> {
-    const jobs = await prismaService.$queryRaw<GetSavedJobResult[]>`
+  ): Promise<GetSavedJobResponse[]> {
+    const jobs = await prismaService.$queryRaw<GetSavedJobResponse[]>`
 SELECT
     sj.id as saved_job_id, sj.user_id, sj.job_id, sj.created_at as saved_at, 
     j.id, j.poster_id, j.title, j.description, j.category_id, j.budget, j.status, 

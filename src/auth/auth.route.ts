@@ -1,4 +1,4 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "../utils/status_code";
 import { AUTH_RESPONSE_SCHEMA } from "./auth.model";
 const tags = ["Tasks"];
