@@ -65,3 +65,33 @@ export type JWT_RESPONSE = {
   email: string;
   poster: number;
 };
+
+export type RegisterAuthControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type LoginAuthControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type MeAuthControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type ResetPasswordAuthControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type LogoutAuthControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};
+
+export type DeleteAuthControllerResponse<T> = {
+  data: T;
+  status_code: number;
+};

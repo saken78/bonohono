@@ -1,4 +1,4 @@
-import { type MiddlewareHandler } from "hono";
+import { type Context, type MiddlewareHandler, type Next } from "hono";
 import { verify } from "hono/jwt";
 import { SECRET } from "../utils/secret";
 import { getSignedCookie } from "hono/cookie";
@@ -7,7 +7,10 @@ import { HttpStatus } from "../utils/status_code";
 import type { JWT_PAYLOAD } from "../auth/auth.model";
 import { winstonlogger } from "../utils/winston-logger";
 
-export const AuthMiddleware: MiddlewareHandler = async (c, next) => {
+export const AuthMiddleware: MiddlewareHandler = async (
+  c: Context,
+  next: Next,
+): Promise<void> => {
   winstonlogger.debug("MIDDLEWARE EXECUTE: ");
   if (!SECRET || SECRET === undefined) {
     throw new HTTPException(HttpStatus.UNAUTHORIZED, {
