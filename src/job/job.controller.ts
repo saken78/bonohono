@@ -9,11 +9,13 @@ import type {
   CreateJobControllerResponse,
   GetAllJobControllerResponse,
   GetIdCancelledJobControllerResponse,
+  GetIdcategoryJobControllerResponse,
   GetIdCompletedJobControllerResponse,
   GetIdInProgressJobControllerResponse,
   GetIdJobControllerResponse,
   GetIdOpenJobControllerResponse,
   GetIdReadyForPaymentJobControllerResponse,
+  GetJobCategoryResponse,
   GetJobResponse,
   RegisterJobRequest,
 } from "./job.model";
@@ -70,8 +72,6 @@ JobController.get(
         message: "param id undefined",
       });
     }
-    // console.dir(c.var, { depth: null });
-    // console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(c)));
     const result: GetJobResponse = await JobService.GetJobById(id);
     return c.json({
       data: result,
@@ -92,7 +92,7 @@ JobController.get(
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param not found",
+        message: "Param id undefined",
       });
     }
     const result: GetJobResponse[] =
@@ -116,7 +116,7 @@ JobController.get(
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param not found",
+        message: "Param id undefined",
       });
     }
     const result: GetJobResponse[] = await JobService.GetJobOpenByUserId(id);
@@ -139,7 +139,7 @@ JobController.get(
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param not found",
+        message: "Param id undefined",
       });
     }
     const result: GetJobResponse[] =
@@ -163,7 +163,7 @@ JobController.get(
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param not found",
+        message: "Param id undefined",
       });
     }
     const result: GetJobResponse[] =
@@ -187,7 +187,7 @@ JobController.get(
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param not found",
+        message: "Param id undefined",
       });
     }
     const result: GetJobResponse[] =
@@ -199,25 +199,35 @@ JobController.get(
   },
 );
 
-// JobController.get("/cg/:category_id", async (c: Context) => {
-//   const user = c.get("user");
-//   if (!user) {
-//     throw new HTTPException(HttpStatus.BAD_REQUEST, {
-//       message: "Unauthorized",
-//     });
-//   }
-//   const rawId = c.req.param("category_id");
-//   if (!rawId || rawId === undefined) {
-//     throw new HTTPException(HttpStatus.BAD_REQUEST, {
-//       message: "body not found",
-//     });
-//   }
-//   const id: string = rawId;
-//   const result = await JobService.GetJobIdWhereCategory(id);
-//   return c.json({
-//     data: result,
-//     status_code: HttpStatus.OK,
-//   });
-// });
+JobController.get(
+  "/category/:category_id",
+  async (
+    c: Context,
+  ): Promise<
+    JSONRespondReturn<
+      GetIdcategoryJobControllerResponse<GetJobCategoryResponse[]>,
+      HttpStatus.OK
+    >
+  > => {
+    const user: JWT_RESPONSE = c.get("user");
+    if (!user) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Unauthorized",
+      });
+    }
+    const rawId: string | undefined = c.req.param("category_id");
+    if (!rawId || rawId === undefined) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "body not found",
+      });
+    }
+    const id: string = rawId;
+    const result = await JobService.GetJobIdWhereCategory(id);
+    return c.json({
+      data: result,
+      status_code: HttpStatus.OK,
+    });
+  },
+);
 
 export default JobController;
