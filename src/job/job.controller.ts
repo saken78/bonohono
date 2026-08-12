@@ -104,7 +104,7 @@ JobController.get(
   },
 );
 JobController.get(
-  ":/id/open",
+  "/:id/open",
   async (
     c: Context,
   ): Promise<
@@ -127,7 +127,7 @@ JobController.get(
   },
 );
 JobController.get(
-  ":/id/in_progress",
+  "/:id/in_progress",
   async (
     c: Context,
   ): Promise<
@@ -151,7 +151,7 @@ JobController.get(
   },
 );
 JobController.get(
-  ":/id/ready_for_payment",
+  "/:id/ready_for_payment",
   async (
     c: Context,
   ): Promise<
@@ -175,7 +175,7 @@ JobController.get(
   },
 );
 JobController.get(
-  ":/id/cancelled",
+  "/:id/cancelled",
   async (
     c: Context,
   ): Promise<
@@ -199,35 +199,35 @@ JobController.get(
   },
 );
 
-JobController.get(
-  "/category/:category_id",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<
-      GetIdcategoryJobControllerResponse<GetJobCategoryResponse[]>,
-      HttpStatus.OK
-    >
-  > => {
-    const user: JWT_RESPONSE = c.get("user");
-    if (!user) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Unauthorized",
-      });
-    }
-    const rawId: string | undefined = c.req.param("category_id");
-    if (!rawId || rawId === undefined) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "body not found",
-      });
-    }
-    const id: string = rawId;
-    const result = await JobService.GetJobIdWhereCategory(id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
-  },
-);
+// JobController.get(
+//   "/category/:category_id",
+//   async (
+//     c: Context,
+//   ): Promise<
+//     JSONRespondReturn<
+//       GetIdcategoryJobControllerResponse<GetJobCategoryResponse[]>,
+//       HttpStatus.OK
+//     >
+//   > => {
+//     const user: JWT_RESPONSE = c.get("user");
+//     if (!user) {
+//       throw new HTTPException(HttpStatus.BAD_REQUEST, {
+//         message: "Unauthorized",
+//       });
+//     }
+//     const rawId: string | undefined = c.req.param("category_id");
+//     if (!rawId || rawId === undefined) {
+//       throw new HTTPException(HttpStatus.BAD_REQUEST, {
+//         message: "body not found",
+//       });
+//     }
+//     const id: string = rawId;
+//     const result = await JobService.GetJobIdWhereCategory(id);
+//     return c.json({
+//       data: result,
+//       status_code: HttpStatus.OK,
+//     });
+//   },
+// );
 
 export default JobController;
