@@ -46,41 +46,21 @@ export type GetJobResponse = {
   poster_id: string;
   title: string;
   description: string;
-  category_id: string | null;
-  budget: Decimal;
-  status: jobs_status;
-  deadline: Date | null;
-  location: string | null;
-  created_at: Date | null;
-  updated_at: Date | null;
-  work_type: jobs_work_type | null;
-  commitment: jobs_commitment | null;
-  experience_level: jobs_experience_level | null;
-  payment_type: jobs_payment_type | null;
-  skills: string | null;
-};
-
-export type GetJobCategoryResponse = {
-  id: string;
-  poster_id: string;
-  title: string;
-  description: string;
-  category_id: string | null;
-  budget: Decimal;
-  status: jobs_status;
-  deadline: Date | null;
-  location: string | null;
-  created_at: Date | null;
-  updated_at: Date | null;
-  work_type: jobs_work_type | null;
-  commitment: jobs_commitment | null;
-  experience_level: jobs_experience_level | null;
-  payment_type: jobs_payment_type | null;
-  skills: string | null;
   categories: {
     name: string;
-    description: string;
-  };
+    description: string | null;
+  } | null;
+  budget: Decimal;
+  status: jobs_status;
+  deadline: Date | null;
+  location: string | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+  work_type: jobs_work_type | null;
+  commitment: jobs_commitment | null;
+  experience_level: jobs_experience_level | null;
+  payment_type: jobs_payment_type | null;
+  skills: string | null;
 };
 
 export type CreateJobControllerResponse<T> = {

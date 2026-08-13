@@ -198,6 +198,15 @@ JobController.get(
     });
   },
 );
+JobController.put("/:id", async (c: Context) => {
+  const id: string | undefined = c.req.param("id");
+  if (!id) {
+    throw new HTTPException(HttpStatus.BAD_REQUEST, {
+      message: "Param id undefined",
+    });
+  }
+  return 0;
+});
 
 // JobController.get(
 //   "/category/:category_id",
