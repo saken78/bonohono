@@ -5,19 +5,18 @@ import { AuthMiddleware } from "../middleware/auth.middleware";
 import { HTTPException } from "hono/http-exception";
 import type { JWT_RESPONSE } from "../auth/auth.model";
 import type { JSONRespondReturn } from "../utils/json";
-import type {
-  CreateJobControllerResponse,
-  GetAllJobControllerResponse,
-  GetIdCancelledJobControllerResponse,
-  GetIdcategoryJobControllerResponse,
-  GetIdCompletedJobControllerResponse,
-  GetIdInProgressJobControllerResponse,
-  GetIdJobControllerResponse,
-  GetIdOpenJobControllerResponse,
-  GetIdReadyForPaymentJobControllerResponse,
-  GetJobCategoryResponse,
-  GetJobResponse,
-  RegisterJobRequest,
+import {
+  UPDATE_JOB_SCHEMA,
+  type CreateJobControllerResponse,
+  type GetAllJobControllerResponse,
+  type GetIdCancelledJobControllerResponse,
+  type GetIdCompletedJobControllerResponse,
+  type GetIdInProgressJobControllerResponse,
+  type GetIdJobControllerResponse,
+  type GetIdOpenJobControllerResponse,
+  type GetIdReadyForPaymentJobControllerResponse,
+  type GetJobResponse,
+  type RegisterJobRequest,
 } from "./job.model";
 
 const JobController = new Hono();
@@ -205,7 +204,18 @@ JobController.put("/:id", async (c: Context) => {
       message: "Param id undefined",
     });
   }
-  return 0;
+  const body = c.req.json();
+  if (!body) {
+    throw new HTTPException(HttpStatus.BAD_REQUEST, {
+      message: "Body status undefined",
+    });
+  }
+  const status = UPDATE_JOB_SCHEMA.parse(body);
+  const result = await JobService.UpdateStatusJobByUserId(id, status.status);
+  return c.json({
+    data: result,
+    status_code: HttpStatus.OK,
+  });
 });
 
 // JobController.get(

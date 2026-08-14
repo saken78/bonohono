@@ -146,7 +146,10 @@ export const JobService = {
     });
     return jobs;
   },
-  async UpdateStatusJobByUserId(id: string, status: jobs_status) {
+  async UpdateStatusJobByUserId(
+    id: string,
+    status: jobs_status,
+  ): Promise<GetJobResponse> {
     const job = await prismaService.jobs.update({
       where: {
         id: id,
