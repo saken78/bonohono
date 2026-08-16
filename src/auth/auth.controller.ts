@@ -1,21 +1,16 @@
-import { Hono, type Context } from "hono";
-import { authService } from "./auth.service";
-import {
-  type AuthResponse,
-  type DeleteAuthControllerResponse,
-  type JWT_RESPONSE,
-  type LoginAuthControllerResponse,
-  type LoginUserRequest,
-  type LogoutAuthControllerResponse,
-  type MeAuthControllerResponse,
-  type RegisterAuthControllerResponse,
-  type RegisterUserRequest,
-  type ResetPasswordAuthControllerResponse,
-  type ResetPasswordRequest,
-} from "./auth.model";
-import { HttpStatus } from "../utils/status_code";
-import { AuthMiddleware } from "../middleware/auth.middleware";
 import type { JSONRespondReturn } from "@/utils/json";
+import { Hono, type Context } from "hono";
+import { AuthMiddleware } from "../middleware/auth.middleware";
+import { HttpStatus } from "../utils/status_code";
+import {
+  LOGIN_SCHEMA,
+  REGISTER_SCHEMA,
+  RESET_PASSWORD_SCHEMA,
+  type AuthControllerResponse,
+  type AuthResponse,
+  type JWT_RESPONSE,
+} from "./auth.model";
+import { authService } from "./auth.service";
 
 const AuthController = new Hono();
 AuthController.post(
@@ -23,13 +18,11 @@ AuthController.post(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      RegisterAuthControllerResponse<AuthResponse>,
-      HttpStatus.CREATED
-    >
+    JSONRespondReturn<AuthControllerResponse<AuthResponse>, HttpStatus.CREATED>
   > => {
-    const body: RegisterUserRequest = await c.req.json();
-    const result = await authService.register(body);
+    const body = await c.req.json();
+    const v = REGISTER_SCHEMA.parse(body);
+    const result = await authService.register(v);
     return c.json({
       data: result,
       status_code: HttpStatus.CREATED,
@@ -41,10 +34,11 @@ AuthController.post(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<LoginAuthControllerResponse<AuthResponse>, HttpStatus.OK>
+    JSONRespondReturn<AuthControllerResponse<AuthResponse>, HttpStatus.OK>
   > => {
-    const body: LoginUserRequest = await c.req.json();
-    const result = await authService.login(body, c);
+    const body = await c.req.json();
+    const v = LOGIN_SCHEMA.parse(body);
+    const result = await authService.login(v, c);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -57,7 +51,7 @@ AuthController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<MeAuthControllerResponse<JWT_RESPONSE>, HttpStatus.OK>
+    JSONRespondReturn<AuthControllerResponse<JWT_RESPONSE>, HttpStatus.OK>
   > => {
     const result = await authService.me(c);
     return c.json({
@@ -71,14 +65,12 @@ AuthController.patch(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      ResetPasswordAuthControllerResponse<string>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<AuthControllerResponse<string>, HttpStatus.OK>
   > => {
     const user: JWT_RESPONSE = c.get("user");
-    const body: ResetPasswordRequest = await c.req.json();
-    await authService.resetPassword(body.password, user.email);
+    const body = await c.req.json();
+    const v = RESET_PASSWORD_SCHEMA.parse(body);
+    await authService.resetPassword(v, user.email);
     return c.json({
       data: "Password changed succesfully",
       status_code: HttpStatus.OK,
@@ -90,7 +82,7 @@ AuthController.delete(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<LogoutAuthControllerResponse<string>, HttpStatus.OK>
+    JSONRespondReturn<AuthControllerResponse<string>, HttpStatus.OK>
   > => {
     await authService.logout(c);
     return c.json({
@@ -104,7 +96,7 @@ AuthController.delete(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<DeleteAuthControllerResponse<string>, HttpStatus.OK>
+    JSONRespondReturn<AuthControllerResponse<string>, HttpStatus.OK>
   > => {
     const user: JWT_RESPONSE = c.get("user");
     await authService.deleteAccount(user.email);

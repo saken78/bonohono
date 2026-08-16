@@ -7,32 +7,27 @@ import { SECRET } from "../utils/secret";
 import { HttpStatus } from "../utils/status_code";
 import {
   type AuthResponse,
-  DELETE_SCHEMA,
   type JWT_PAYLOAD,
   type JWT_RESPONSE,
-  LOGIN_SCHEMA,
   type LoginUserRequest,
-  REGISTER_SCHEMA,
   type RegisterUserRequest,
-  RESET_PASSWORD_SCHEMA,
+  type ResetPasswordRequest,
 } from "./auth.model";
 
 export const authService = {
   async register(req: RegisterUserRequest): Promise<AuthResponse> {
-    const request = REGISTER_SCHEMA.parse(req);
-
-    const password = await Bun.password.hash(request.password, {
+    const password = await Bun.password.hash(req.password, {
       algorithm: "argon2id",
-      memoryCost: 4,
+      memoryCost: 65534,
       timeCost: 3,
     });
 
     const user = await prismaService.users.create({
       data: {
-        email: request.email,
+        email: req.email,
         password: password,
-        first_name: request.first_name,
-        last_name: request.last_name ?? null,
+        first_name: req.first_name,
+        last_name: req.last_name ?? null,
       },
       select: { email: true, first_name: true },
     });
@@ -43,8 +38,6 @@ export const authService = {
     };
   },
   async login(req: LoginUserRequest, c: Context): Promise<AuthResponse> {
-    const request = LOGIN_SCHEMA.parse(req);
-
     if (!SECRET || SECRET === undefined) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
         message: "Secret not found",
@@ -52,7 +45,7 @@ export const authService = {
     }
 
     const result = await prismaService.users.findUnique({
-      where: { email: request.email },
+      where: { email: req.email },
       select: {
         id: true,
         first_name: true,
@@ -68,7 +61,7 @@ export const authService = {
       });
     }
 
-    const match = await Bun.password.verify(request.password, result.password);
+    const match = await Bun.password.verify(req.password, result.password);
 
     if (!match) {
       throw new HTTPException(HttpStatus.UNAUTHORIZED, {
@@ -104,12 +97,10 @@ export const authService = {
     }
     deleteCookie(c, "refresh_token");
   },
-  async resetPassword(password: string, email: string): Promise<void> {
-    const request = RESET_PASSWORD_SCHEMA.parse(password);
-
-    const npw = await Bun.password.hash(request.password, {
+  async resetPassword(req: ResetPasswordRequest, email: string): Promise<void> {
+    const npw = await Bun.password.hash(req.password, {
       algorithm: "argon2id",
-      memoryCost: 4,
+      memoryCost: 65534,
       timeCost: 3,
     });
 
@@ -119,14 +110,8 @@ export const authService = {
     });
   },
   async deleteAccount(email: string): Promise<void> {
-    const validatet_email = DELETE_SCHEMA.parse(email);
-    if (!validatet_email.email) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "Unauthorized",
-      });
-    }
     await prismaService.users.delete({
-      where: { email: validatet_email.email },
+      where: { email: email },
     });
   },
 };

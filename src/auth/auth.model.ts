@@ -1,40 +1,26 @@
 import { z } from "@hono/zod-openapi";
 
 export const REGISTER_SCHEMA = z.object({
-  email: z.string().email().min(1).max(100),
+  email: z.email().min(1).max(100),
   password: z.string().min(8).max(100),
   first_name: z.string().min(4).max(100),
   last_name: z.string().min(4).max(100).nullable(),
 });
 
-export type RegisterUserRequest = {
-  email: string;
-  password: string;
-  first_name: string;
-  last_name?: string;
-};
+export type RegisterUserRequest = z.infer<typeof REGISTER_SCHEMA>;
 
 export const LOGIN_SCHEMA = z.object({
-  email: z.string().email().min(1).max(100),
+  email: z.email().min(1).max(100),
   password: z.string().min(8).max(100),
 });
 
-export type LoginUserRequest = {
-  email: string;
-  password: string;
-};
+export type LoginUserRequest = z.infer<typeof LOGIN_SCHEMA>;
 
 export const RESET_PASSWORD_SCHEMA = z.object({
   password: z.string().min(8).max(100),
 });
 
-export type ResetPasswordRequest = {
-  password: string;
-};
-
-export const DELETE_SCHEMA = z.object({
-  email: z.string().email().min(1).max(100),
-});
+export type ResetPasswordRequest = z.infer<typeof RESET_PASSWORD_SCHEMA>;
 
 // RESPONSE
 export type AuthResponse = {
@@ -66,32 +52,7 @@ export type JWT_RESPONSE = {
   poster: number;
 };
 
-export type RegisterAuthControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type LoginAuthControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type MeAuthControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type ResetPasswordAuthControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type LogoutAuthControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type DeleteAuthControllerResponse<T> = {
+export type AuthControllerResponse<T> = {
   data: T;
   status_code: number;
 };
