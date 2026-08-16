@@ -21,9 +21,6 @@
       "@/*": ["./src/*"]
     },
     "typeRoots": ["./node_modules/@types"],
-    "tsc-alias": {
-      "resolveFullPaths": true
-    },
 
     // Best practices
     "strict": true,
