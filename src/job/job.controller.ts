@@ -7,14 +7,7 @@ import type { JWT_RESPONSE } from "../auth/auth.model";
 import type { JSONRespondReturn } from "../utils/json";
 import {
   UPDATE_JOB_SCHEMA,
-  type CreateJobControllerResponse,
-  type GetAllJobControllerResponse,
-  type GetIdCancelledJobControllerResponse,
-  type GetIdCompletedJobControllerResponse,
-  type GetIdInProgressJobControllerResponse,
-  type GetIdJobControllerResponse,
-  type GetIdOpenJobControllerResponse,
-  type GetIdReadyForPaymentJobControllerResponse,
+  type JobControllerResponse,
   type GetJobResponse,
   type RegisterJobRequest,
 } from "./job.model";
@@ -26,10 +19,7 @@ JobController.post(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      CreateJobControllerResponse<GetJobResponse>,
-      HttpStatus.CREATED
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.CREATED>
   > => {
     const user: JWT_RESPONSE = c.get("user");
     const body: RegisterJobRequest = await c.req.json();
@@ -45,10 +35,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetAllJobControllerResponse<GetJobResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const result: GetJobResponse[] = await JobService.GetAllJob();
     return c.json({
@@ -63,7 +50,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<GetIdJobControllerResponse<GetJobResponse>, HttpStatus.OK>
+    JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -83,10 +70,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetIdCompletedJobControllerResponse<GetJobResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -107,10 +91,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetIdOpenJobControllerResponse<GetJobResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -130,10 +111,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetIdInProgressJobControllerResponse<GetJobResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -154,10 +132,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetIdReadyForPaymentJobControllerResponse<GetJobResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -178,10 +153,7 @@ JobController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetIdCancelledJobControllerResponse<GetJobResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
     if (!id) {
@@ -197,56 +169,35 @@ JobController.get(
     });
   },
 );
-JobController.put("/:id", async (c: Context) => {
-  const id: string | undefined = c.req.param("id");
-  if (!id) {
-    throw new HTTPException(HttpStatus.BAD_REQUEST, {
-      message: "Param id undefined",
+JobController.put(
+  "/:id",
+  async (
+    c: Context,
+  ): Promise<
+    JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.OK>
+  > => {
+    const id: string | undefined = c.req.param("id");
+    if (!id) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Param id undefined",
+      });
+    }
+    const body = c.req.json();
+    if (!body) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Body status undefined",
+      });
+    }
+    const validate = UPDATE_JOB_SCHEMA.parse(body);
+    const result = await JobService.UpdateStatusJobByUserId(
+      id,
+      validate.status,
+    );
+    return c.json({
+      data: result,
+      status_code: HttpStatus.OK,
     });
-  }
-  const body = c.req.json();
-  if (!body) {
-    throw new HTTPException(HttpStatus.BAD_REQUEST, {
-      message: "Body status undefined",
-    });
-  }
-  const status = UPDATE_JOB_SCHEMA.parse(body);
-  const result = await JobService.UpdateStatusJobByUserId(id, status.status);
-  return c.json({
-    data: result,
-    status_code: HttpStatus.OK,
-  });
-});
-
-// JobController.get(
-//   "/category/:category_id",
-//   async (
-//     c: Context,
-//   ): Promise<
-//     JSONRespondReturn<
-//       GetIdcategoryJobControllerResponse<GetJobCategoryResponse[]>,
-//       HttpStatus.OK
-//     >
-//   > => {
-//     const user: JWT_RESPONSE = c.get("user");
-//     if (!user) {
-//       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-//         message: "Unauthorized",
-//       });
-//     }
-//     const rawId: string | undefined = c.req.param("category_id");
-//     if (!rawId || rawId === undefined) {
-//       throw new HTTPException(HttpStatus.BAD_REQUEST, {
-//         message: "body not found",
-//       });
-//     }
-//     const id: string = rawId;
-//     const result = await JobService.GetJobIdWhereCategory(id);
-//     return c.json({
-//       data: result,
-//       status_code: HttpStatus.OK,
-//     });
-//   },
-// );
+  },
+);
 
 export default JobController;

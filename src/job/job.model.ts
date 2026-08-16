@@ -73,47 +73,7 @@ export type GetJobResponse = {
   skills: string | null;
 };
 
-export type CreateJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetAllJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdCompletedJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdOpenJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdInProgressJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdReadyForPaymentJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdCancelledJobControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type GetIdcategoryJobControllerResponse<T> = {
+export type JobControllerResponse<T> = {
   data: T;
   status_code: number;
 };
