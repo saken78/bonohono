@@ -8,19 +8,16 @@ import {
 } from "../../generated/prisma/enums";
 import { z } from "@hono/zod-openapi";
 
-export const GET_JOB_BY_CATEGORY_SCHEMA = z.object({
-  category_id: z.string().min(3),
-});
-export const GET_JOB_ID_SCHEMA = z.string();
 export const REGISTER_JOB_SCHEMA = z.object({
+  poster_id: z.string(),
   title: z.string().min(2).max(100),
   budget: z.number().positive(),
   description: z.string(),
   category_id: z.string(),
   status: z.enum(jobs_status),
-  deadline: z.iso.datetime(),
+  deadline: z.iso.date(),
   location: z.string(),
-  work_type: z.enum(jobs_work_type),
+  work_type: z.enum(jobs_work_type).nullable(),
   commitment: z.enum(jobs_commitment),
 });
 
@@ -34,22 +31,7 @@ export const UPDATE_JOB_SCHEMA = z.object({
   ]),
 });
 
-export type RegisterJobRequest = {
-  poster_id: string;
-  title: string;
-  budget: Decimal;
-  description: string;
-  category_id: string;
-  status: jobs_status;
-  deadline: Date;
-  location: string;
-  work_type?: jobs_work_type;
-  commitment: jobs_commitment;
-};
-
-export type GetJobByCategoryRequest = {
-  category_id: string;
-};
+export type RegisterJobRequest = z.infer<typeof REGISTER_JOB_SCHEMA>;
 
 export type GetJobResponse = {
   id: string;

@@ -4,12 +4,7 @@ import { prismaService } from "../db/MariaDB";
 import { HttpStatus } from "../utils/status_code";
 import { winstonlogger } from "../utils/winston-logger";
 import { selectData } from "./job.helper";
-import {
-  GET_JOB_ID_SCHEMA,
-  type GetJobResponse,
-  REGISTER_JOB_SCHEMA,
-  type RegisterJobRequest,
-} from "./job.model";
+import { type GetJobResponse, type RegisterJobRequest } from "./job.model";
 
 export const JobService = {
   async GetAllJob(): Promise<GetJobResponse[]> {
@@ -44,26 +39,24 @@ export const JobService = {
     req: RegisterJobRequest,
     user_id: string,
   ): Promise<GetJobResponse> {
-    const request = REGISTER_JOB_SCHEMA.parse(req);
     const job = await prismaService.jobs.create({
       data: {
         poster_id: user_id,
-        title: request.title,
-        budget: request.budget,
-        description: request.description,
-        category_id: request.category_id,
-        status: request.status,
-        deadline: request.deadline,
-        location: request.location,
-        work_type: request.work_type ?? null,
-        commitment: request.commitment,
+        title: req.title,
+        budget: req.budget,
+        description: req.description,
+        category_id: req.category_id,
+        status: req.status,
+        deadline: req.deadline,
+        location: req.location,
+        work_type: req.work_type ?? null,
+        commitment: req.commitment,
       },
       select: selectData,
     });
     return job;
   },
-  async GetJobById(raw_id: string): Promise<GetJobResponse> {
-    const id = GET_JOB_ID_SCHEMA.parse(raw_id);
+  async GetJobById(id: string): Promise<GetJobResponse> {
     winstonlogger.debug("executed: ");
     const job = await prismaService.jobs.findUnique({
       where: { id: id },

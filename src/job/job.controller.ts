@@ -9,7 +9,7 @@ import {
   UPDATE_JOB_SCHEMA,
   type JobControllerResponse,
   type GetJobResponse,
-  type RegisterJobRequest,
+  REGISTER_JOB_SCHEMA,
 } from "./job.model";
 
 const JobController = new Hono();
@@ -22,8 +22,9 @@ JobController.post(
     JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.CREATED>
   > => {
     const user: JWT_RESPONSE = c.get("user");
-    const body: RegisterJobRequest = await c.req.json();
-    const result: GetJobResponse = await JobService.PostJob(body, user.id);
+    const body = await c.req.json();
+    const v = REGISTER_JOB_SCHEMA.parse(body);
+    const result: GetJobResponse = await JobService.PostJob(v, user.id);
     return c.json({
       data: result,
       status_code: HttpStatus.CREATED,
@@ -188,11 +189,8 @@ JobController.put(
         message: "Body status undefined",
       });
     }
-    const validate = UPDATE_JOB_SCHEMA.parse(body);
-    const result = await JobService.UpdateStatusJobByUserId(
-      id,
-      validate.status,
-    );
+    const v = UPDATE_JOB_SCHEMA.parse(body);
+    const result = await JobService.UpdateStatusJobByUserId(id, v.status);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
