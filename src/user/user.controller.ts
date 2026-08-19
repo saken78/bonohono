@@ -1,14 +1,10 @@
 import { Hono, type Context } from "hono";
-import { userService } from "./user.service.ts";
-import { HttpStatus } from "../utils/status_code.ts";
-import { AuthMiddleware } from "../middleware/auth.middleware.ts";
 import { HTTPException } from "hono/http-exception";
-import type {
-  GetAllUserControllerResponse,
-  GetUserByIdControllerResponse,
-  UserResponse,
-} from "./user.model.ts";
+import { AuthMiddleware } from "../middleware/auth.middleware.ts";
 import type { JSONRespondReturn } from "../utils/json.ts";
+import { HttpStatus } from "../utils/status_code.ts";
+import type { UserControllerResponse, UserResponse } from "./user.model.ts";
+import { userService } from "./user.service.ts";
 
 const UserController = new Hono();
 UserController.use("*", AuthMiddleware);
@@ -17,10 +13,7 @@ UserController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetAllUserControllerResponse<UserResponse[]>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<UserControllerResponse<UserResponse[]>, HttpStatus.OK>
   > => {
     const user: UserResponse[] = await userService.getAllUser();
     return c.json({
@@ -34,12 +27,9 @@ UserController.get(
   async (
     c: Context,
   ): Promise<
-    JSONRespondReturn<
-      GetUserByIdControllerResponse<UserResponse>,
-      HttpStatus.OK
-    >
+    JSONRespondReturn<UserControllerResponse<UserResponse>, HttpStatus.OK>
   > => {
-    const id = c.req.param("id");
+    const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
         message: "param id not found",

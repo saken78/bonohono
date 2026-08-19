@@ -6,7 +6,7 @@ import { winstonlogger } from "../utils/winston-logger";
 import { selectData } from "./job.helper";
 import { type GetJobResponse, type RegisterJobRequest } from "./job.model";
 
-export const JobService = {
+export const jobService = {
   async GetAllJob(): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       select: selectData,

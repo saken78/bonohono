@@ -1,5 +1,5 @@
 import { Hono, type Context } from "hono";
-import { JobService } from "./job.service";
+import { jobService } from "./job.service";
 import { HttpStatus } from "../utils/status_code";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { HTTPException } from "hono/http-exception";
@@ -24,7 +24,7 @@ JobController.post(
     const user: JWT_RESPONSE = c.get("user");
     const body = await c.req.json();
     const v = REGISTER_JOB_SCHEMA.parse(body);
-    const result: GetJobResponse = await JobService.PostJob(v, user.id);
+    const result: GetJobResponse = await jobService.PostJob(v, user.id);
     return c.json({
       data: result,
       status_code: HttpStatus.CREATED,
@@ -38,7 +38,7 @@ JobController.get(
   ): Promise<
     JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
-    const result: GetJobResponse[] = await JobService.GetAllJob();
+    const result: GetJobResponse[] = await jobService.GetAllJob();
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -59,7 +59,7 @@ JobController.get(
         message: "param id undefined",
       });
     }
-    const result: GetJobResponse = await JobService.GetJobById(id);
+    const result: GetJobResponse = await jobService.GetJobById(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -80,7 +80,7 @@ JobController.get(
       });
     }
     const result: GetJobResponse[] =
-      await JobService.GetJobCompleteByUserId(id);
+      await jobService.GetJobCompleteByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -100,7 +100,7 @@ JobController.get(
         message: "Param id undefined",
       });
     }
-    const result: GetJobResponse[] = await JobService.GetJobOpenByUserId(id);
+    const result: GetJobResponse[] = await jobService.GetJobOpenByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -121,7 +121,7 @@ JobController.get(
       });
     }
     const result: GetJobResponse[] =
-      await JobService.GetJobInProgressByUserId(id);
+      await jobService.GetJobInProgressByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -142,7 +142,7 @@ JobController.get(
       });
     }
     const result: GetJobResponse[] =
-      await JobService.GetJobReadyForPaymentByUserId(id);
+      await jobService.GetJobReadyForPaymentByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -163,7 +163,7 @@ JobController.get(
       });
     }
     const result: GetJobResponse[] =
-      await JobService.GetJobCancelledByUserId(id);
+      await jobService.GetJobCancelledByUserId(id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -183,14 +183,14 @@ JobController.put(
         message: "Param id undefined",
       });
     }
-    const body = c.req.json();
+    const body = await c.req.json();
     if (!body) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
         message: "Body status undefined",
       });
     }
     const v = UPDATE_JOB_SCHEMA.parse(body);
-    const result = await JobService.UpdateStatusJobByUserId(id, v.status);
+    const result = await jobService.UpdateStatusJobByUserId(id, v.status);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,

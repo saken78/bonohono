@@ -4,7 +4,7 @@ import type {
   GetSavedJobResponse,
 } from "./saved_job.model";
 
-export const SavedJobService = {
+export const savedJobService = {
   async GetSavedJobByUserId(user_id: string): Promise<GetSavedJobResponse[]> {
     const saved_job = await prismaService.$queryRaw<GetSavedJobResponse[]>`
     SELECT

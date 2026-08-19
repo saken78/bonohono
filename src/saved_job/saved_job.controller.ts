@@ -1,15 +1,13 @@
 import { Hono, type Context } from "hono";
 import { HttpStatus } from "../utils/status_code";
-import { SavedJobService } from "./saved_job.service";
+import { savedJobService } from "./saved_job.service";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import type {
   CreateJobRequest,
-  CreateSavedJobController,
   CreateSavedJobResponse,
   DeleteJobRequest,
-  DeleteSavedJobController,
-  GetSavedJobByUserIdController,
   GetSavedJobResponse,
+  SavedJobControllerResponse,
 } from "./saved_job.model";
 import type { JWT_RESPONSE } from "../auth/auth.model";
 import { HTTPException } from "hono/http-exception";
@@ -23,7 +21,7 @@ SavedJobController.post(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      CreateSavedJobController<CreateSavedJobResponse>,
+      SavedJobControllerResponse<CreateSavedJobResponse>,
       HttpStatus.CREATED
     >
   > => {
@@ -39,7 +37,7 @@ SavedJobController.post(
         message: "UNAUTHORIZED",
       });
     }
-    const result: CreateSavedJobResponse = await SavedJobService.CreateSavedJob(
+    const result: CreateSavedJobResponse = await savedJobService.CreateSavedJob(
       user.id,
       job.job_id,
     );
@@ -56,7 +54,7 @@ SavedJobController.get(
     c: Context,
   ): Promise<
     JSONRespondReturn<
-      GetSavedJobByUserIdController<GetSavedJobResponse[]>,
+      SavedJobControllerResponse<GetSavedJobResponse[]>,
       HttpStatus.OK
     >
   > => {
@@ -67,7 +65,7 @@ SavedJobController.get(
       });
     }
     const result: GetSavedJobResponse[] =
-      await SavedJobService.GetSavedJobByUserId(user.id);
+      await savedJobService.GetSavedJobByUserId(user.id);
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
@@ -78,7 +76,9 @@ SavedJobController.delete(
   "/",
   async (
     c: Context,
-  ): Promise<JSONRespondReturn<DeleteSavedJobController, HttpStatus.OK>> => {
+  ): Promise<
+    JSONRespondReturn<SavedJobControllerResponse<string>, HttpStatus.OK>
+  > => {
     const jobs: DeleteJobRequest = await c.req.json();
     const user: JWT_RESPONSE = c.get("user");
     if (!user.id) {
@@ -91,9 +91,9 @@ SavedJobController.delete(
         message: "body job_id undefined",
       });
     }
-    await SavedJobService.DeleteSavedJob(user.id, jobs.job_id);
+    await savedJobService.DeleteSavedJob(user.id, jobs.job_id);
     return c.json({
-      message: "Job delete from saved",
+      data: "Job delete from saved",
       status_code: HttpStatus.OK,
     });
   },

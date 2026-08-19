@@ -34,17 +34,7 @@ export type CreateSavedJobResponse = {
   job_id: string;
 };
 
-export type CreateSavedJobController<T> = {
-  data: T;
-  status_code: number;
-};
-
-export type DeleteSavedJobController = {
-  message: string;
-  status_code: number;
-};
-
-export type GetSavedJobByUserIdController<T> = {
+export type SavedJobControllerResponse<T> = {
   data: T;
   status_code: number;
 };

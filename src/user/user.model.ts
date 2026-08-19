@@ -3,11 +3,8 @@ export type UserResponse = {
   first_name: string;
   poster: number | null;
 };
-export type GetAllUserControllerResponse<T> = {
-  data: T;
-  status_code: number;
-};
-export type GetUserByIdControllerResponse<T> = {
+
+export type UserControllerResponse<T> = {
   data: T;
   status_code: number;
 };
