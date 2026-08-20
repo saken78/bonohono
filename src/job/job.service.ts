@@ -69,67 +69,14 @@ export const jobService = {
     }
     return job;
   },
-  async GetJobCompleteByUserId(id: string): Promise<GetJobResponse[]> {
+  async GetJobStatusByUserId(
+    id: string,
+    status: jobs_status,
+  ): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       where: {
         poster_id: id,
-        status: "completed",
-      },
-      select: selectData,
-      take: 20,
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-    return jobs;
-  },
-  async GetJobOpenByUserId(id: string): Promise<GetJobResponse[]> {
-    const jobs = await prismaService.jobs.findMany({
-      where: {
-        poster_id: id,
-        status: "open",
-      },
-      select: selectData,
-      take: 20,
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-    return jobs;
-  },
-  async GetJobInProgressByUserId(id: string): Promise<GetJobResponse[]> {
-    const jobs = await prismaService.jobs.findMany({
-      where: {
-        poster_id: id,
-        status: "in_progress",
-      },
-      select: selectData,
-      take: 20,
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-    return jobs;
-  },
-  async GetJobReadyForPaymentByUserId(id: string): Promise<GetJobResponse[]> {
-    const jobs = await prismaService.jobs.findMany({
-      where: {
-        poster_id: id,
-        status: "ready_for_payment",
-      },
-      select: selectData,
-      take: 20,
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-    return jobs;
-  },
-  async GetJobCancelledByUserId(id: string): Promise<GetJobResponse[]> {
-    const jobs = await prismaService.jobs.findMany({
-      where: {
-        poster_id: id,
-        status: "cancelled",
+        status: status,
       },
       select: selectData,
       take: 20,

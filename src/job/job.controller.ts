@@ -10,6 +10,7 @@ import {
   type JobControllerResponse,
   type GetJobResponse,
   REGISTER_JOB_SCHEMA,
+  GET_STATUS,
 } from "./job.model";
 
 const JobController = new Hono();
@@ -67,7 +68,7 @@ JobController.get(
   },
 );
 JobController.get(
-  "/:id/complete",
+  "/:id/status",
   async (
     c: Context,
   ): Promise<
@@ -79,91 +80,12 @@ JobController.get(
         message: "Param id undefined",
       });
     }
-    const result: GetJobResponse[] =
-      await jobService.GetJobCompleteByUserId(id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
-  },
-);
-JobController.get(
-  "/:id/open",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
-  > => {
-    const id: string | undefined = c.req.param("id");
-    if (!id) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param id undefined",
-      });
-    }
-    const result: GetJobResponse[] = await jobService.GetJobOpenByUserId(id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
-  },
-);
-JobController.get(
-  "/:id/in_progress",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
-  > => {
-    const id: string | undefined = c.req.param("id");
-    if (!id) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param id undefined",
-      });
-    }
-    const result: GetJobResponse[] =
-      await jobService.GetJobInProgressByUserId(id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
-  },
-);
-JobController.get(
-  "/:id/ready_for_payment",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
-  > => {
-    const id: string | undefined = c.req.param("id");
-    if (!id) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param id undefined",
-      });
-    }
-    const result: GetJobResponse[] =
-      await jobService.GetJobReadyForPaymentByUserId(id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
-  },
-);
-JobController.get(
-  "/:id/cancelled",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
-  > => {
-    const id: string | undefined = c.req.param("id");
-    if (!id) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param id undefined",
-      });
-    }
-    const result: GetJobResponse[] =
-      await jobService.GetJobCancelledByUserId(id);
+    const body = await c.req.json();
+    const v = GET_STATUS.parse(body.status);
+    const result: GetJobResponse[] = await jobService.GetJobStatusByUserId(
+      id,
+      v.status,
+    );
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
