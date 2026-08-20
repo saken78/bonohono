@@ -56,8 +56,8 @@ FROM
     JOIN jobs as j ON sj.job_id = j.id
     JOIN users as u ON j.poster_id = u.id
 WHERE
-    sj.user_id = ${user_id}
-    sj.job_id= ${job_id}
+    sj.user_id = ${user_id} AND
+    sj.job_id = ${job_id}
 ORDER BY sj.created_at DESC`;
     return jobs;
   },

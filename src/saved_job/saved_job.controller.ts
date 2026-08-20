@@ -41,7 +41,6 @@ SavedJobController.post(
       user.id,
       job.job_id,
     );
-    c.status(HttpStatus.CREATED);
     return c.json({
       data: result,
       status_code: HttpStatus.CREATED,
