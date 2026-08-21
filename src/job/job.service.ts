@@ -4,7 +4,11 @@ import { prismaService } from "../db/MariaDB";
 import { HttpStatus } from "../utils/status_code";
 import { winstonlogger } from "../utils/winston-logger";
 import { selectData } from "./job.helper";
-import { type GetJobResponse, type RegisterJobRequest } from "./job.model";
+import {
+  type ApplyJobResponse,
+  type GetJobResponse,
+  type RegisterJobRequest,
+} from "./job.model";
 
 export const jobService = {
   async GetAllJob(): Promise<GetJobResponse[]> {
@@ -100,5 +104,73 @@ export const jobService = {
       select: selectData,
     });
     return job;
+  },
+  async ApplyJob(
+    job_id: string,
+    proposal: string,
+    proposal_budget: number | undefined,
+    tasker_id: string,
+  ): Promise<ApplyJobResponse> {
+    const job = await prismaService.jobs.findUnique({
+      where: {
+        id: job_id,
+      },
+      select: {
+        poster_id: true,
+        status: true,
+      },
+    });
+
+    if (!job) {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Job not found",
+      });
+    }
+
+    if (job.status !== "open") {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Cannot apply to a job that is not open",
+      });
+    }
+    const existingApplication = await prismaService.applications.findFirst({
+      where: {
+        job_id: job_id,
+        tasker_id: tasker_id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existingApplication) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "You have already applied to this job",
+      });
+    }
+
+    if (job.poster_id === tasker_id) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "You cannot apply to your own job",
+      });
+    }
+
+    const application = await prismaService.applications.create({
+      data: {
+        job_id: job_id,
+        tasker_id: tasker_id,
+        proposal: proposal,
+        proposed_budget: proposal_budget ?? null,
+      },
+      select: {
+        id: true,
+        job_id: true,
+        tasker_id: true,
+        proposal: true,
+        proposed_budget: true,
+        status: true,
+        created_at: true,
+      },
+    });
+    return application;
   },
 };

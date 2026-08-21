@@ -11,6 +11,8 @@ import {
   type GetJobResponse,
   REGISTER_JOB_SCHEMA,
   GET_STATUS,
+  APPLY_JOB_SCHEMA,
+  type ApplyJobResponse,
 } from "./job.model";
 
 const JobController = new Hono();
@@ -113,6 +115,40 @@ JobController.put(
     }
     const v = UPDATE_JOB_SCHEMA.parse(body);
     const result = await jobService.UpdateStatusJobByUserId(id, v.status);
+    return c.json({
+      data: result,
+      status_code: HttpStatus.OK,
+    });
+  },
+);
+
+JobController.post(
+  "/:id",
+  async (
+    c: Context,
+  ): Promise<
+    JSONRespondReturn<JobControllerResponse<ApplyJobResponse>, HttpStatus.OK>
+  > => {
+    const id: string | undefined = c.req.param("id");
+    if (!id) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Param id undefined",
+      });
+    }
+    const body = await c.req.json();
+    if (!body) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Body status undefined",
+      });
+    }
+    const tasker: JWT_RESPONSE = c.get("user");
+    const v = APPLY_JOB_SCHEMA.parse(body);
+    const result = await jobService.ApplyJob(
+      id,
+      v.proposal,
+      v.proposed_budget,
+      tasker.id,
+    );
     return c.json({
       data: result,
       status_code: HttpStatus.OK,

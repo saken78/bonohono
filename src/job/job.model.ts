@@ -1,5 +1,6 @@
 import type { Decimal } from "@prisma/client/runtime/index-browser";
 import {
+  applications_status,
   jobs_commitment,
   jobs_experience_level,
   jobs_payment_type,
@@ -20,6 +21,21 @@ export const REGISTER_JOB_SCHEMA = z.object({
   work_type: z.enum(jobs_work_type).nullable(),
   commitment: z.enum(jobs_commitment),
 });
+
+export const APPLY_JOB_SCHEMA = z.object({
+  proposal: z.string().min(10).max(500),
+  proposed_budget: z.number().positive().optional(),
+});
+
+export type ApplyJobResponse = {
+  id: string;
+  job_id: string;
+  tasker_id: string;
+  proposal: string;
+  proposed_budget: Decimal | null;
+  status: applications_status | null;
+  created_at: Date | null;
+};
 
 export const UPDATE_JOB_SCHEMA = z.object({
   status: z.enum([
