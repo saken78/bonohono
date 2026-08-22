@@ -101,6 +101,7 @@ JobController.put(
   ): Promise<
     JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.OK>
   > => {
+    const user: JWT_RESPONSE = c.get("user");
     const id: string | undefined = c.req.param("id");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
@@ -114,7 +115,11 @@ JobController.put(
       });
     }
     const v = UPDATE_JOB_SCHEMA.parse(body);
-    const result = await jobService.UpdateStatusJobByUserId(id, v.status);
+    const result = await jobService.UpdateStatusJobByUserId(
+      id,
+      v.status,
+      user.id,
+    );
     return c.json({
       data: result,
       status_code: HttpStatus.OK,

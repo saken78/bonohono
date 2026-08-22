@@ -93,8 +93,27 @@ export const jobService = {
   async UpdateStatusJobByUserId(
     id: string,
     status: jobs_status,
+    user_id: string,
   ): Promise<GetJobResponse> {
-    const job = await prismaService.jobs.update({
+    const job = await prismaService.jobs.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        poster_id: true,
+      },
+    });
+    if (!job) {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Job not found",
+      });
+    }
+    if (job.poster_id !== user_id) {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Your not allowed to update this job",
+      });
+    }
+    const updated = await prismaService.jobs.update({
       where: {
         id: id,
       },
@@ -103,7 +122,7 @@ export const jobService = {
       },
       select: selectData,
     });
-    return job;
+    return updated;
   },
   async ApplyJob(
     job_id: string,
