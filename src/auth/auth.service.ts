@@ -78,7 +78,13 @@ export const authService = {
     };
 
     const token = await sign(pay, SECRET);
-    await setSignedCookie(c, "refresh_token", token, SECRET);
+    await setSignedCookie(c, "refresh_token", token, SECRET, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Lax",
+      path: "/",
+      maxAge: 60 * 60,
+    });
     return {
       first_name: result.first_name,
       email: result.email,
