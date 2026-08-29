@@ -10,7 +10,6 @@ import {
 import { z } from "@hono/zod-openapi";
 
 export const REGISTER_JOB_SCHEMA = z.object({
-  poster_id: z.string(),
   title: z.string().min(2).max(100),
   budget: z.number().positive(),
   description: z.string(),

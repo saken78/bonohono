@@ -72,7 +72,7 @@ AuthController.patch(
     const v = RESET_PASSWORD_SCHEMA.parse(body);
     await authService.resetPassword(v, user.email);
     return c.json({
-      data: "Password changed succesfully",
+      data: "Password changed successfully",
       status_code: HttpStatus.OK,
     });
   },
@@ -86,7 +86,7 @@ AuthController.delete(
   > => {
     await authService.logout(c);
     return c.json({
-      data: "Cookies cleared succesfully",
+      data: "Cookies cleared successfully",
       status_code: HttpStatus.OK,
     });
   },
@@ -101,7 +101,7 @@ AuthController.delete(
     const user: JWT_RESPONSE = c.get("user");
     await authService.deleteAccount(user.email);
     return c.json({
-      data: "Account deleted succesfully",
+      data: "Account deleted successfully",
       status_code: HttpStatus.OK,
     });
   },

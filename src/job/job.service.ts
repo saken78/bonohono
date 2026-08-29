@@ -21,24 +21,6 @@ export const jobService = {
     });
     return jobs;
   },
-  async GetJobIdWhereCategory(id: string): Promise<GetJobResponse[]> {
-    const jobs = await prismaService.jobs.findMany({
-      select: selectData,
-      where: { category_id: id },
-      take: 20,
-      orderBy: {
-        created_at: "desc",
-      },
-    });
-
-    if (!jobs) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "data not found",
-      });
-    }
-
-    return jobs;
-  },
   async PostJob(
     req: RegisterJobRequest,
     user_id: string,
@@ -109,8 +91,8 @@ export const jobService = {
       });
     }
     if (job.poster_id !== user_id) {
-      throw new HTTPException(HttpStatus.NOT_FOUND, {
-        message: "Your not allowed to update this job",
+      throw new HTTPException(HttpStatus.FORBIDDEN, {
+        message: "You're not allowed to update this job",
       });
     }
     const updated = await prismaService.jobs.update({
