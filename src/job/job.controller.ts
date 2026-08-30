@@ -83,7 +83,7 @@ JobController.get(
       });
     }
     const body = await c.req.json();
-    const v = GET_STATUS.parse(body.status);
+    const v = GET_STATUS.parse(body);
     const result: GetJobResponse[] = await jobService.GetJobStatusByUserId(
       id,
       v.status,

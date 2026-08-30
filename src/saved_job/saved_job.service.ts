@@ -1,8 +1,10 @@
+import { HTTPException } from "hono/http-exception";
 import { prismaService } from "../db/MariaDB";
 import type {
   CreateSavedJobResponse,
   GetSavedJobResponse,
 } from "./saved_job.model";
+import { HttpStatus } from "@/utils/status_code";
 
 export const savedJobService = {
   async GetSavedJobByUserId(user_id: string): Promise<GetSavedJobResponse[]> {
@@ -72,8 +74,17 @@ ORDER BY sj.created_at DESC`;
     return job;
   },
   async DeleteSavedJob(user_id: string, job_id: string): Promise<void> {
-    await prismaService.$executeRaw`
-    DELETE from saved_jobs where job_id = ${job_id} 
-    AND user_id = ${user_id}`;
+    const result = await prismaService.saved_jobs.deleteMany({
+      where: {
+        job_id,
+        user_id,
+      },
+    });
+
+    if (result.count === 0) {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Saved job not found",
+      });
+    }
   },
 };
