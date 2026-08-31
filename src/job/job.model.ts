@@ -46,15 +46,7 @@ export const UPDATE_JOB_SCHEMA = z.object({
   ]),
 });
 
-export const GET_STATUS = z.object({
-  status: z.enum([
-    "open",
-    "in_progress",
-    "ready_for_payment",
-    "completed",
-    "cancelled",
-  ]),
-});
+export const GET_STATUS = UPDATE_JOB_SCHEMA;
 
 export type GetStatusRequest = z.infer<typeof GET_STATUS>;
 

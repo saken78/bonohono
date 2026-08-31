@@ -92,7 +92,7 @@ SavedJobController.delete(
     }
     await savedJobService.DeleteSavedJob(user.id, jobs.job_id);
     return c.json({
-      data: "Job delete from saved",
+      data: "Job deleted from saved",
       status_code: HttpStatus.OK,
     });
   },
