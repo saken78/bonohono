@@ -12,7 +12,7 @@ export const AuthMiddleware: MiddlewareHandler = async (
   next: Next,
 ): Promise<void> => {
   winstonlogger.debug("MIDDLEWARE EXECUTE: ");
-  if (!SECRET || SECRET === undefined) {
+  if (!SECRET) {
     throw new HTTPException(HttpStatus.UNAUTHORIZED, {
       message: "SECRET NOT FOUND",
     });

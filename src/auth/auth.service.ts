@@ -38,7 +38,7 @@ export const authService = {
     };
   },
   async login(req: LoginUserRequest, c: Context): Promise<AuthResponse> {
-    if (!SECRET || SECRET === undefined) {
+    if (!SECRET) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
         message: "Secret not found",
       });
