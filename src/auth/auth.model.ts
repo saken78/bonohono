@@ -4,7 +4,7 @@ export const REGISTER_SCHEMA = z.object({
   email: z.email().min(1).max(100),
   password: z.string().min(8).max(100),
   first_name: z.string().min(4).max(100),
-  last_name: z.string().min(4).max(100).nullable(),
+  last_name: z.string().min(4).max(100).nullable().optional(),
 });
 
 export type RegisterUserRequest = z.infer<typeof REGISTER_SCHEMA>;

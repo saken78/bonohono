@@ -2,7 +2,6 @@ import { HTTPException } from "hono/http-exception";
 import type { jobs_status } from "../../generated/prisma/enums";
 import { prismaService } from "../db/MariaDB";
 import { HttpStatus } from "../utils/status_code";
-import { winstonlogger } from "../utils/winston-logger";
 import { selectData } from "./job.helper";
 import {
   type ApplyJobResponse,
@@ -43,7 +42,6 @@ export const jobService = {
     return job;
   },
   async GetJobById(id: string): Promise<GetJobResponse> {
-    winstonlogger.debug("executed: ");
     const job = await prismaService.jobs.findUnique({
       where: { id: id },
       select: selectData,
