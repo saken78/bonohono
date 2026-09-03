@@ -41,7 +41,7 @@ export type AuthResponseQuery = {
 export type JWT_PAYLOAD = {
   sub?: string;
   email?: string;
-  role?: number | null | undefined;
+  role?: string | null | undefined;
   exp?: number;
   iat?: number;
 };
@@ -49,7 +49,7 @@ export type JWT_PAYLOAD = {
 export type JWT_RESPONSE = {
   id: string;
   email: string;
-  poster: number;
+  role: string;
 };
 
 export type AuthControllerResponse<T> = {

@@ -51,7 +51,7 @@ export const authService = {
         first_name: true,
         email: true,
         password: true,
-        poster: true,
+        role: true,
       },
     });
 
@@ -72,7 +72,7 @@ export const authService = {
     const pay: JWT_PAYLOAD = {
       sub: result.id,
       email: result.email,
-      role: result.poster,
+      role: result.role,
       exp: Math.floor(Date.now() / 1000) + 60 * 60,
       iat: Math.floor(Date.now() / 1000),
     };

@@ -32,7 +32,7 @@ export const AuthMiddleware: MiddlewareHandler = async (
   c.set("user", {
     id: user.sub,
     email: user.email,
-    poster: user.role,
+    role: user.role,
   });
   await next();
 };

@@ -1307,7 +1307,7 @@ export const UsersScalarFieldEnum = {
   avatar: 'avatar',
   created_at: 'created_at',
   updated_at: 'updated_at',
-  poster: 'poster',
+  role: 'role',
   settings: 'settings',
   availability_status: 'availability_status',
   avg_rating: 'avg_rating',
@@ -1450,6 +1450,7 @@ export const usersOrderByRelevanceFieldEnum = {
   phone: 'phone',
   bio: 'bio',
   avatar: 'avatar',
+  role: 'role',
   settings: 'settings',
   availability_status: 'availability_status'
 } as const

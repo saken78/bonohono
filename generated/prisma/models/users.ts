@@ -27,13 +27,11 @@ export type AggregateUsers = {
 }
 
 export type UsersAvgAggregateOutputType = {
-  poster: number | null
   avg_rating: runtime.Decimal | null
   total_reviews: number | null
 }
 
 export type UsersSumAggregateOutputType = {
-  poster: number | null
   avg_rating: runtime.Decimal | null
   total_reviews: number | null
 }
@@ -51,7 +49,7 @@ export type UsersMinAggregateOutputType = {
   avatar: string | null
   created_at: Date | null
   updated_at: Date | null
-  poster: number | null
+  role: string | null
   settings: string | null
   availability_status: string | null
   avg_rating: runtime.Decimal | null
@@ -71,7 +69,7 @@ export type UsersMaxAggregateOutputType = {
   avatar: string | null
   created_at: Date | null
   updated_at: Date | null
-  poster: number | null
+  role: string | null
   settings: string | null
   availability_status: string | null
   avg_rating: runtime.Decimal | null
@@ -91,7 +89,7 @@ export type UsersCountAggregateOutputType = {
   avatar: number
   created_at: number
   updated_at: number
-  poster: number
+  role: number
   settings: number
   availability_status: number
   avg_rating: number
@@ -101,13 +99,11 @@ export type UsersCountAggregateOutputType = {
 
 
 export type UsersAvgAggregateInputType = {
-  poster?: true
   avg_rating?: true
   total_reviews?: true
 }
 
 export type UsersSumAggregateInputType = {
-  poster?: true
   avg_rating?: true
   total_reviews?: true
 }
@@ -125,7 +121,7 @@ export type UsersMinAggregateInputType = {
   avatar?: true
   created_at?: true
   updated_at?: true
-  poster?: true
+  role?: true
   settings?: true
   availability_status?: true
   avg_rating?: true
@@ -145,7 +141,7 @@ export type UsersMaxAggregateInputType = {
   avatar?: true
   created_at?: true
   updated_at?: true
-  poster?: true
+  role?: true
   settings?: true
   availability_status?: true
   avg_rating?: true
@@ -165,7 +161,7 @@ export type UsersCountAggregateInputType = {
   avatar?: true
   created_at?: true
   updated_at?: true
-  poster?: true
+  role?: true
   settings?: true
   availability_status?: true
   avg_rating?: true
@@ -272,7 +268,7 @@ export type UsersGroupByOutputType = {
   avatar: string | null
   created_at: Date | null
   updated_at: Date | null
-  poster: number | null
+  role: string | null
   settings: string | null
   availability_status: string | null
   avg_rating: runtime.Decimal | null
@@ -315,7 +311,7 @@ export type usersWhereInput = {
   avatar?: Prisma.StringNullableFilter<"users"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
-  poster?: Prisma.IntNullableFilter<"users"> | number | null
+  role?: Prisma.StringNullableFilter<"users"> | string | null
   settings?: Prisma.StringNullableFilter<"users"> | string | null
   availability_status?: Prisma.StringNullableFilter<"users"> | string | null
   avg_rating?: Prisma.DecimalNullableFilter<"users"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -343,7 +339,7 @@ export type usersOrderByWithRelationInput = {
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  poster?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrderInput | Prisma.SortOrder
   availability_status?: Prisma.SortOrderInput | Prisma.SortOrder
   avg_rating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -375,7 +371,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   avatar?: Prisma.StringNullableFilter<"users"> | string | null
   created_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableFilter<"users"> | Date | string | null
-  poster?: Prisma.IntNullableFilter<"users"> | number | null
+  role?: Prisma.StringNullableFilter<"users"> | string | null
   settings?: Prisma.StringNullableFilter<"users"> | string | null
   availability_status?: Prisma.StringNullableFilter<"users"> | string | null
   avg_rating?: Prisma.DecimalNullableFilter<"users"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -403,7 +399,7 @@ export type usersOrderByWithAggregationInput = {
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
-  poster?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrderInput | Prisma.SortOrder
   availability_status?: Prisma.SortOrderInput | Prisma.SortOrder
   avg_rating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -431,7 +427,7 @@ export type usersScalarWhereWithAggregatesInput = {
   avatar?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
-  poster?: Prisma.IntNullableWithAggregatesFilter<"users"> | number | null
+  role?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   settings?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   availability_status?: Prisma.StringNullableWithAggregatesFilter<"users"> | string | null
   avg_rating?: Prisma.DecimalNullableWithAggregatesFilter<"users"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -451,7 +447,7 @@ export type usersCreateInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -479,7 +475,7 @@ export type usersUncheckedCreateInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -507,7 +503,7 @@ export type usersUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -535,7 +531,7 @@ export type usersUncheckedUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -563,7 +559,7 @@ export type usersCreateManyInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -583,7 +579,7 @@ export type usersUpdateManyMutationInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -603,7 +599,7 @@ export type usersUncheckedUpdateManyInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -634,7 +630,7 @@ export type usersCountOrderByAggregateInput = {
   avatar?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  poster?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   availability_status?: Prisma.SortOrder
   avg_rating?: Prisma.SortOrder
@@ -642,7 +638,6 @@ export type usersCountOrderByAggregateInput = {
 }
 
 export type usersAvgOrderByAggregateInput = {
-  poster?: Prisma.SortOrder
   avg_rating?: Prisma.SortOrder
   total_reviews?: Prisma.SortOrder
 }
@@ -660,7 +655,7 @@ export type usersMaxOrderByAggregateInput = {
   avatar?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  poster?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   availability_status?: Prisma.SortOrder
   avg_rating?: Prisma.SortOrder
@@ -680,7 +675,7 @@ export type usersMinOrderByAggregateInput = {
   avatar?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  poster?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   availability_status?: Prisma.SortOrder
   avg_rating?: Prisma.SortOrder
@@ -688,7 +683,6 @@ export type usersMinOrderByAggregateInput = {
 }
 
 export type usersSumOrderByAggregateInput = {
-  poster?: Prisma.SortOrder
   avg_rating?: Prisma.SortOrder
   total_reviews?: Prisma.SortOrder
 }
@@ -825,7 +819,7 @@ export type usersCreateWithoutApplicationsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -852,7 +846,7 @@ export type usersUncheckedCreateWithoutApplicationsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -895,7 +889,7 @@ export type usersUpdateWithoutApplicationsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -922,7 +916,7 @@ export type usersUncheckedUpdateWithoutApplicationsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -949,7 +943,7 @@ export type usersCreateWithoutJobsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -976,7 +970,7 @@ export type usersUncheckedCreateWithoutJobsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1019,7 +1013,7 @@ export type usersUpdateWithoutJobsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1046,7 +1040,7 @@ export type usersUncheckedUpdateWithoutJobsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1073,7 +1067,7 @@ export type usersCreateWithoutPayment_methodsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1100,7 +1094,7 @@ export type usersUncheckedCreateWithoutPayment_methodsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1143,7 +1137,7 @@ export type usersUpdateWithoutPayment_methodsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1170,7 +1164,7 @@ export type usersUncheckedUpdateWithoutPayment_methodsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1197,7 +1191,7 @@ export type usersCreateWithoutPayments_payments_receiver_idTousersInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1224,7 +1218,7 @@ export type usersUncheckedCreateWithoutPayments_payments_receiver_idTousersInput
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1256,7 +1250,7 @@ export type usersCreateWithoutPayments_payments_sender_idTousersInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1283,7 +1277,7 @@ export type usersUncheckedCreateWithoutPayments_payments_sender_idTousersInput =
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1326,7 +1320,7 @@ export type usersUpdateWithoutPayments_payments_receiver_idTousersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1353,7 +1347,7 @@ export type usersUncheckedUpdateWithoutPayments_payments_receiver_idTousersInput
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1391,7 +1385,7 @@ export type usersUpdateWithoutPayments_payments_sender_idTousersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1418,7 +1412,7 @@ export type usersUncheckedUpdateWithoutPayments_payments_sender_idTousersInput =
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1445,7 +1439,7 @@ export type usersCreateWithoutUser_skillsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1472,7 +1466,7 @@ export type usersUncheckedCreateWithoutUser_skillsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1515,7 +1509,7 @@ export type usersUpdateWithoutUser_skillsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1542,7 +1536,7 @@ export type usersUncheckedUpdateWithoutUser_skillsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1569,7 +1563,7 @@ export type usersCreateWithoutWalletsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1596,7 +1590,7 @@ export type usersUncheckedCreateWithoutWalletsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1639,7 +1633,7 @@ export type usersUpdateWithoutWalletsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1666,7 +1660,7 @@ export type usersUncheckedUpdateWithoutWalletsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1693,7 +1687,7 @@ export type usersCreateWithoutSaved_jobsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1720,7 +1714,7 @@ export type usersUncheckedCreateWithoutSaved_jobsInput = {
   avatar?: string | null
   created_at?: Date | string | null
   updated_at?: Date | string | null
-  poster?: number | null
+  role?: string | null
   settings?: string | null
   availability_status?: string | null
   avg_rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1763,7 +1757,7 @@ export type usersUpdateWithoutSaved_jobsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1790,7 +1784,7 @@ export type usersUncheckedUpdateWithoutSaved_jobsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  poster?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availability_status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avg_rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1911,7 +1905,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   avatar?: boolean
   created_at?: boolean
   updated_at?: boolean
-  poster?: boolean
+  role?: boolean
   settings?: boolean
   availability_status?: boolean
   avg_rating?: boolean
@@ -1942,14 +1936,14 @@ export type usersSelectScalar = {
   avatar?: boolean
   created_at?: boolean
   updated_at?: boolean
-  poster?: boolean
+  role?: boolean
   settings?: boolean
   availability_status?: boolean
   avg_rating?: boolean
   total_reviews?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "first_name" | "last_name" | "reset_token" | "reset_token_expiry" | "phone" | "bio" | "avatar" | "created_at" | "updated_at" | "poster" | "settings" | "availability_status" | "avg_rating" | "total_reviews", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "first_name" | "last_name" | "reset_token" | "reset_token_expiry" | "phone" | "bio" | "avatar" | "created_at" | "updated_at" | "role" | "settings" | "availability_status" | "avg_rating" | "total_reviews", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   applications?: boolean | Prisma.users$applicationsArgs<ExtArgs>
   jobs?: boolean | Prisma.users$jobsArgs<ExtArgs>
@@ -1987,7 +1981,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     avatar: string | null
     created_at: Date | null
     updated_at: Date | null
-    poster: number | null
+    role: string | null
     settings: string | null
     availability_status: string | null
     avg_rating: runtime.Decimal | null
@@ -2381,7 +2375,7 @@ export interface usersFieldRefs {
   readonly avatar: Prisma.FieldRef<"users", 'String'>
   readonly created_at: Prisma.FieldRef<"users", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"users", 'DateTime'>
-  readonly poster: Prisma.FieldRef<"users", 'Int'>
+  readonly role: Prisma.FieldRef<"users", 'String'>
   readonly settings: Prisma.FieldRef<"users", 'String'>
   readonly availability_status: Prisma.FieldRef<"users", 'String'>
   readonly avg_rating: Prisma.FieldRef<"users", 'Decimal'>

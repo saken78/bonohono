@@ -1,7 +1,7 @@
 export type UserResponse = {
   email: string;
   first_name: string;
-  poster: number | null;
+  role: string | null;
 };
 
 export type UserControllerResponse<T> = {

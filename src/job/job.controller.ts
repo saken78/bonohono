@@ -14,26 +14,11 @@ import {
   APPLY_JOB_SCHEMA,
   type ApplyJobResponse,
 } from "./job.model";
+import { PosterMiddleware } from "@/middleware/poster.middleware";
+import { TaskerMiddleware } from "@/middleware/tasker.middleware";
 
 const JobController = new Hono();
 JobController.use("*", AuthMiddleware);
-JobController.post(
-  "/",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.CREATED>
-  > => {
-    const user: JWT_RESPONSE = c.get("user");
-    const body = await c.req.json();
-    const v = REGISTER_JOB_SCHEMA.parse(body);
-    const result: GetJobResponse = await jobService.PostJob(v, user.id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.CREATED,
-    });
-  },
-);
 JobController.get(
   "/",
   async (
@@ -48,7 +33,6 @@ JobController.get(
     });
   },
 );
-
 JobController.get(
   "/:id",
   async (
@@ -66,6 +50,24 @@ JobController.get(
     return c.json({
       data: result,
       status_code: HttpStatus.OK,
+    });
+  },
+);
+JobController.use(PosterMiddleware);
+JobController.post(
+  "/",
+  async (
+    c: Context,
+  ): Promise<
+    JSONRespondReturn<JobControllerResponse<GetJobResponse>, HttpStatus.CREATED>
+  > => {
+    const user: JWT_RESPONSE = c.get("user");
+    const body = await c.req.json();
+    const v = REGISTER_JOB_SCHEMA.parse(body);
+    const result: GetJobResponse = await jobService.PostJob(v, user.id);
+    return c.json({
+      data: result,
+      status_code: HttpStatus.CREATED,
     });
   },
 );
@@ -126,7 +128,7 @@ JobController.put(
     });
   },
 );
-
+JobController.use(TaskerMiddleware);
 JobController.post(
   "/:id",
   async (
