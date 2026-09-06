@@ -22,7 +22,8 @@
     "@rcmade/hono-docs": "^1.4.0",
     "@types/bun": "^1.4.1",
     "prisma": "^7.8.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   },
   "exclude": [
     "generated",
