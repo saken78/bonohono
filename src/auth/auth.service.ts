@@ -13,12 +13,13 @@ import {
   type RegisterUserRequest,
   type ResetPasswordRequest,
 } from "./auth.model";
+import { COST } from "@/utils/constants";
 
 export const authService = {
   async register(req: RegisterUserRequest): Promise<AuthResponse> {
     const password = await Bun.password.hash(req.password, {
       algorithm: "argon2id",
-      memoryCost: 65534,
+      memoryCost: COST,
       timeCost: 3,
     });
 
@@ -106,7 +107,7 @@ export const authService = {
   async resetPassword(req: ResetPasswordRequest, email: string): Promise<void> {
     const npw = await Bun.password.hash(req.password, {
       algorithm: "argon2id",
-      memoryCost: 65534,
+      memoryCost: COST,
       timeCost: 3,
     });
 
