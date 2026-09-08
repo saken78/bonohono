@@ -79,13 +79,18 @@ JobController.get(
     JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const id: string | undefined = c.req.param("id");
+    const status = c.req.query("status");
     if (!id) {
       throw new HTTPException(HttpStatus.BAD_REQUEST, {
         message: "Param id undefined",
       });
     }
-    const body = await c.req.json();
-    const v = GET_STATUS.parse(body);
+    if (!status) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Query param status is required",
+      });
+    }
+    const v = GET_STATUS.parse({ status });
     const result: GetJobResponse[] = await jobService.GetJobStatusByUserId(
       id,
       v.status,
