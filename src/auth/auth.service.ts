@@ -13,14 +13,19 @@ import {
   type RegisterUserRequest,
   type ResetPasswordRequest,
 } from "./auth.model";
-import { COST } from "@/utils/constants";
+import {
+  ARGON2_TIME_COST,
+  COOKIE_MAX,
+  COST,
+  JWT_EXPIRY_SECONDS,
+} from "@/utils/constants";
 
 export const authService = {
   async register(req: RegisterUserRequest): Promise<AuthResponse> {
     const password = await Bun.password.hash(req.password, {
       algorithm: "argon2id",
       memoryCost: COST,
-      timeCost: 3,
+      timeCost: ARGON2_TIME_COST,
     });
 
     const user = await prismaService.users.create({
@@ -70,12 +75,13 @@ export const authService = {
       });
     }
 
+    const now = Math.floor(Date.now() / 1000);
     const pay: JWT_PAYLOAD = {
       sub: result.id,
       email: result.email,
       role: result.role,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-      iat: Math.floor(Date.now() / 1000),
+      exp: now + JWT_EXPIRY_SECONDS,
+      iat: now,
     };
 
     const token = await sign(pay, SECRET);
@@ -84,7 +90,7 @@ export const authService = {
       secure: true,
       sameSite: "Lax",
       path: "/",
-      maxAge: 60 * 60,
+      maxAge: COOKIE_MAX,
     });
     return {
       first_name: result.first_name,
@@ -108,7 +114,7 @@ export const authService = {
     const npw = await Bun.password.hash(req.password, {
       algorithm: "argon2id",
       memoryCost: COST,
-      timeCost: 3,
+      timeCost: ARGON2_TIME_COST,
     });
 
     await prismaService.users.update({

@@ -3,3 +3,6 @@ node_modules/
 .folder/
 
 /src/generated/prisma
+
+.env
+.env.*

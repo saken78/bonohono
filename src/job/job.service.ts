@@ -8,12 +8,13 @@ import {
   type GetJobResponse,
   type RegisterJobRequest,
 } from "./job.model";
+import { DEFAULT_PAGE_SIZE } from "@/utils/constants";
 
 export const jobService = {
   async GetAllJob(): Promise<GetJobResponse[]> {
     const jobs = await prismaService.jobs.findMany({
       select: selectData,
-      take: 20,
+      take: DEFAULT_PAGE_SIZE,
       orderBy: {
         created_at: "desc",
       },
@@ -63,7 +64,7 @@ export const jobService = {
         status: status,
       },
       select: selectData,
-      take: 20,
+      take: DEFAULT_PAGE_SIZE,
       orderBy: {
         created_at: "desc",
       },

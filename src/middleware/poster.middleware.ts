@@ -1,3 +1,4 @@
+import { ROLE_POSTER } from "@/utils/constants";
 import type { JWT_RESPONSE } from "../auth/auth.model";
 import { HttpStatus } from "../utils/status_code";
 import type { Context, MiddlewareHandler, Next } from "hono";
@@ -8,7 +9,7 @@ export const PosterMiddleware: MiddlewareHandler = async (
   next: Next,
 ): Promise<void> => {
   const user: JWT_RESPONSE = await c.get("user");
-  if (user.role !== "poster") {
+  if (user.role !== ROLE_POSTER) {
     throw new HTTPException(HttpStatus.FORBIDDEN, {
       message: "Role Poster only",
     });
