@@ -3,17 +3,17 @@ import { ZodError } from "zod";
 import { Prisma } from "../../generated/prisma/client";
 import { type Context } from "hono";
 
-type Success<T> = {
-  data: T;
-  error: null;
-};
-
-type Failure<T> = {
-  data: null;
-  error: T;
-};
-
-export type Result<T, E = Error | HTTPException> = Success<T> | Failure<E>;
+// type Success<T> = {
+//   data: T;
+//   error: null;
+// };
+//
+// type Failure<T> = {
+//   data: null;
+//   error: T;
+// };
+//
+// export type Result<T, E = Error | HTTPException> = Success<T> | Failure<E>;
 
 const GlobalError = async (err: unknown, c: Context) => {
   if (err instanceof HTTPException) {

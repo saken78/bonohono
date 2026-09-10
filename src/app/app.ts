@@ -6,7 +6,6 @@ import JobController from "../job/job.controller";
 import SavedJobController from "../saved_job/saved_job.controller";
 import UserController from "../user/user.controller";
 import GlobalError from "../utils/error-handling";
-import docs from "../utils/scalar";
 import { winstonlogger } from "../utils/winston-logger";
 
 export const app = new Hono();
@@ -14,7 +13,6 @@ app.use("/*", prettyJSON({ force: true }));
 app.use("/*", logger());
 app
   .basePath("/api")
-  .route("/docs", docs)
   .route("/users", UserController)
   .route("/auth", AuthController)
   .route("/jobs", JobController)
