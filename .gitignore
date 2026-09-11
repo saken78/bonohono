@@ -2,7 +2,7 @@
 node_modules/
 .folder/
 
-/src/generated/prisma
+/generated
 
 .env
 .env.*

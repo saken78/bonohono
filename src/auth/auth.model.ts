@@ -28,16 +28,6 @@ export type AuthResponse = {
   first_name: string;
 };
 
-export const AUTH_RESPONSE_SCHEMA = {
-  email: z.string().openapi("example@gmail.com"),
-  first_name: z.string().openapi("example"),
-};
-
-export type AuthResponseQuery = {
-  email: string;
-  first_name: string;
-};
-
 export type JWT_PAYLOAD = {
   sub?: string;
   email?: string;

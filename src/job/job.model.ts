@@ -48,8 +48,6 @@ export const UPDATE_JOB_SCHEMA = z.object({
 
 export const GET_STATUS = UPDATE_JOB_SCHEMA;
 
-export type GetStatusRequest = z.infer<typeof GET_STATUS>;
-
 export type RegisterJobRequest = z.infer<typeof REGISTER_JOB_SCHEMA>;
 
 export type GetJobResponse = {
