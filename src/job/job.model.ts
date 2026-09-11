@@ -1,4 +1,3 @@
-import type { Decimal } from "@prisma/client/runtime/index-browser";
 import {
   applications_status,
   jobs_commitment,
@@ -8,6 +7,7 @@ import {
   jobs_work_type,
 } from "../../generated/prisma/enums";
 import { z } from "@hono/zod-openapi";
+import type { Decimal } from "../../generated/prisma/internal/prismaNamespace";
 
 export const REGISTER_JOB_SCHEMA = z.object({
   title: z.string().min(2).max(100),

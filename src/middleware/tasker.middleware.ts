@@ -8,7 +8,7 @@ export const TaskerMiddleware: MiddlewareHandler = async (
   c: Context,
   next: Next,
 ): Promise<void> => {
-  const user: JWT_RESPONSE = await c.get("user");
+  const user: JWT_RESPONSE = c.get("user");
   if (user.role !== ROLE_TASKER) {
     throw new HTTPException(HttpStatus.FORBIDDEN, {
       message: "Role Tasker only",

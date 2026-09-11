@@ -8,7 +8,7 @@ export const PosterMiddleware: MiddlewareHandler = async (
   c: Context,
   next: Next,
 ): Promise<void> => {
-  const user: JWT_RESPONSE = await c.get("user");
+  const user: JWT_RESPONSE = c.get("user");
   if (user.role !== ROLE_POSTER) {
     throw new HTTPException(HttpStatus.FORBIDDEN, {
       message: "Role Poster only",
