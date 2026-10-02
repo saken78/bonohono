@@ -1,4 +1,5 @@
 export type UserResponse = {
+  id: string;
   email: string;
   first_name: string;
   role: string | null;

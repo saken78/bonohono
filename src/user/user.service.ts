@@ -6,14 +6,26 @@ import { HttpStatus } from "../utils/status_code";
 export const userService = {
   async getAllUser(): Promise<UserResponse[]> {
     const result = await prismaService.users.findMany({
-      select: { email: true, first_name: true, role: true },
+      select: {
+        id: true,
+        email: true,
+        first_name: true,
+        role: true,
+      },
     });
     return result;
   },
   async getUserById(id: string): Promise<UserResponse> {
     const result = await prismaService.users.findUnique({
-      where: { id: id },
-      select: { email: true, first_name: true, role: true },
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        email: true,
+        first_name: true,
+        role: true,
+      },
     });
     if (!result) {
       throw new HTTPException(HttpStatus.NOT_FOUND, {
@@ -21,6 +33,7 @@ export const userService = {
       });
     }
     return {
+      id: result.id,
       email: result.email,
       first_name: result.first_name,
       role: result.role,
