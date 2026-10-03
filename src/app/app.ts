@@ -7,6 +7,7 @@ import SavedJobController from "../saved_job/saved_job.controller";
 import UserController from "../user/user.controller";
 import GlobalError from "../utils/error-handling";
 import { winstonlogger } from "../utils/winston-logger";
+import { ApplicationController } from "@/applications/application.controller";
 
 export const app = new Hono();
 app.use("/*", prettyJSON({ force: true }));
@@ -16,7 +17,8 @@ app
   .route("/users", UserController)
   .route("/auth", AuthController)
   .route("/jobs", JobController)
-  .route("/saved-jobs", SavedJobController);
+  .route("/saved-jobs", SavedJobController)
+  .route("/applications", ApplicationController);
 
 app.onError(GlobalError);
 for (let i = 0; i < app.routes.length; i++) {
