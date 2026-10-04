@@ -19,3 +19,7 @@ export type ApplicationResponse = {
   created_at: String | null | undefined;
   updated_at: String | null | undefined;
 };
+
+export type ApplicationControllerResponse<T> = {
+  data: T;
+};

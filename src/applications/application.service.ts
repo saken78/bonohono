@@ -40,11 +40,6 @@ export const applicationService = {
       });
     }
 
-    // const created_at = data.created_at?.toISOString().split("T");
-    // const created_at1 = data.created_at?.toISOString().split("T")[0];
-    // console.log(created_at);
-    // console.log(created_at1);
-
     const created_at = data.created_at?.toISOString().split("T")[0];
     const updated_at = data.updated_at?.toISOString().split("T")[0];
 
@@ -58,5 +53,25 @@ export const applicationService = {
       created_at: created_at,
       updated_at: updated_at,
     };
+  },
+  async myApplications(tasker_id: string): Promise<ApplicationResponse[]> {
+    const raw = await prismaService.applications.findMany({
+      where: {
+        tasker_id: tasker_id,
+      },
+    });
+    const data = raw.map((ap) => {
+      return {
+        id: ap.id,
+        job_id: ap.job_id,
+        tasker_id: ap.tasker_id,
+        proposal: ap.proposal,
+        proposed_budget: ap.proposed_budget,
+        status: ap.status,
+        created_at: ap.created_at?.toISOString().split("T")[0],
+        updated_at: ap.updated_at?.toISOString().split("T")[0],
+      };
+    });
+    return data;
   },
 };
