@@ -44,5 +44,4 @@ export type JWT_RESPONSE = {
 
 export type AuthControllerResponse<T> = {
   data: T;
-  status_code: number;
 };

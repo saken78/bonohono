@@ -11,6 +11,7 @@ import {
   type JWT_RESPONSE,
 } from "./auth.model";
 import { authService } from "./auth.service";
+import { jsonCreated, jsonOK } from "@/lib/response";
 
 const AuthController = new Hono();
 AuthController.post(
@@ -23,10 +24,7 @@ AuthController.post(
     const body = await c.req.json();
     const v = REGISTER_SCHEMA.parse(body);
     const result = await authService.register(v);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.CREATED,
-    });
+    return jsonCreated(c, result);
   },
 );
 AuthController.post(
@@ -39,10 +37,7 @@ AuthController.post(
     const body = await c.req.json();
     const v = LOGIN_SCHEMA.parse(body);
     const result = await authService.login(v, c);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, result);
   },
 );
 AuthController.use(AuthMiddleware);
@@ -54,10 +49,7 @@ AuthController.get(
     JSONRespondReturn<AuthControllerResponse<JWT_RESPONSE>, HttpStatus.OK>
   > => {
     const result = await authService.me(c);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, result);
   },
 );
 AuthController.patch(
@@ -71,10 +63,7 @@ AuthController.patch(
     const body = await c.req.json();
     const v = RESET_PASSWORD_SCHEMA.parse(body);
     await authService.resetPassword(v, user.email);
-    return c.json({
-      data: "Password changed successfully",
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, "Password changed successfully");
   },
 );
 AuthController.delete(
@@ -85,10 +74,7 @@ AuthController.delete(
     JSONRespondReturn<AuthControllerResponse<string>, HttpStatus.OK>
   > => {
     await authService.logout(c);
-    return c.json({
-      data: "Cookies cleared successfully",
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, "Cookies cleared successfully");
   },
 );
 AuthController.delete(
@@ -100,10 +86,7 @@ AuthController.delete(
   > => {
     const user: JWT_RESPONSE = c.get("user");
     await authService.deleteAccount(user.email);
-    return c.json({
-      data: "Account deleted successfully",
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, "Account deleted successfully");
   },
 );
 export default AuthController;
