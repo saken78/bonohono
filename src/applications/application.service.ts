@@ -10,6 +10,28 @@ export const applicationService = {
     proposal: string,
     proposed_budget: number,
   ): Promise<ApplicationResponse> {
+    const check_job = await prismaService.jobs.findUnique({
+      where: {
+        id: job_id,
+      },
+      select: {
+        poster_id: true,
+        status: true,
+      },
+    });
+
+    if (!check_job) {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Job not foud",
+      });
+    }
+
+    if (check_job.status !== "open") {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Cannot apply to a job that is not open",
+      });
+    }
+
     const existing = await prismaService.applications.findUnique({
       where: {
         job_id_tasker_id: {
