@@ -32,11 +32,23 @@ export const userService = {
         message: "User with this id not found",
       });
     }
-    return {
-      id: result.id,
-      email: result.email,
-      first_name: result.first_name,
-      role: result.role,
-    };
+    return result;
+  },
+  async changeRole(id: string, role: string): Promise<UserResponse> {
+    const result = await prismaService.users.update({
+      where: {
+        id: id,
+      },
+      data: {
+        role: role,
+      },
+      select: {
+        id: true,
+        email: true,
+        first_name: true,
+        role: true,
+      },
+    });
+    return result;
   },
 };

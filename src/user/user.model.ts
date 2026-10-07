@@ -1,3 +1,5 @@
+import z from "zod";
+
 export type UserResponse = {
   id: string;
   email: string;
@@ -5,7 +7,12 @@ export type UserResponse = {
   role: string | null;
 };
 
+export const BODY_JOB_SCHEMA = z.object({
+  role: z.string().min(8).max(100),
+});
+
+export type BodyJobRequest = z.infer<typeof BODY_JOB_SCHEMA>;
+
 export type UserControllerResponse<T> = {
   data: T;
-  status_code: number;
 };
