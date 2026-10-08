@@ -2,6 +2,7 @@ import { HTTPException } from "hono/http-exception";
 import { prismaService } from "../db/MariaDB";
 import type { UserResponse } from "./user.model";
 import { HttpStatus } from "../utils/status_code";
+import type { users_role } from "../../generated/prisma/enums";
 
 export const userService = {
   async getAllUser(): Promise<UserResponse[]> {
@@ -34,7 +35,7 @@ export const userService = {
     }
     return result;
   },
-  async changeRole(id: string, role: string): Promise<UserResponse> {
+  async changeRole(id: string, role: users_role): Promise<UserResponse> {
     const result = await prismaService.users.update({
       where: {
         id: id,

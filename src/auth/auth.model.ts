@@ -1,10 +1,12 @@
 import { z } from "@hono/zod-openapi";
+import { users_role } from "../../generated/prisma/enums";
 
 export const REGISTER_SCHEMA = z.object({
   email: z.email().min(1).max(100),
   password: z.string().min(8).max(100),
   first_name: z.string().min(4).max(100),
   last_name: z.string().min(4).max(100).nullable().optional(),
+  role: z.enum(users_role),
 });
 
 export type RegisterUserRequest = z.infer<typeof REGISTER_SCHEMA>;
@@ -24,8 +26,11 @@ export type ResetPasswordRequest = z.infer<typeof RESET_PASSWORD_SCHEMA>;
 
 // RESPONSE
 export type AuthResponse = {
+  id: string;
   email: string;
   first_name: string;
+  last_name: string | null;
+  role: users_role | null;
 };
 
 export type JWT_PAYLOAD = {

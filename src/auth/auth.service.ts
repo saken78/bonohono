@@ -34,14 +34,18 @@ export const authService = {
         password: password,
         first_name: req.first_name,
         last_name: req.last_name ?? null,
+        role: req.role,
       },
-      select: { email: true, first_name: true },
+      select: {
+        id: true,
+        email: true,
+        first_name: true,
+        last_name: true,
+        role: true,
+      },
     });
 
-    return {
-      email: user.email,
-      first_name: user.first_name,
-    };
+    return user;
   },
   async login(req: LoginUserRequest, c: Context): Promise<AuthResponse> {
     if (!SECRET) {
@@ -55,6 +59,7 @@ export const authService = {
       select: {
         id: true,
         first_name: true,
+        last_name: true,
         email: true,
         password: true,
         role: true,
@@ -93,8 +98,11 @@ export const authService = {
       maxAge: COOKIE_MAX,
     });
     return {
-      first_name: result.first_name,
+      id: result.id,
       email: result.email,
+      first_name: result.first_name,
+      last_name: result.last_name,
+      role: result.role,
     };
   },
   async me(c: Context): Promise<JWT_RESPONSE> {

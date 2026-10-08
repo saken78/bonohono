@@ -1,4 +1,5 @@
 import z from "zod";
+import { users_role } from "../../generated/prisma/enums";
 
 export type UserResponse = {
   id: string;
@@ -8,7 +9,7 @@ export type UserResponse = {
 };
 
 export const BODY_JOB_SCHEMA = z.object({
-  role: z.string().min(8).max(100),
+  role: z.enum(users_role),
 });
 
 export type BodyJobRequest = z.infer<typeof BODY_JOB_SCHEMA>;
