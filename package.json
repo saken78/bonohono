@@ -2,7 +2,7 @@
   "name": "bono",
   "scripts": {
     "start": "bun run --hot src/index.ts",
-    "start:hard": "bun run --watch src/index.ts",
+    "start:hard": "tsc --noEmit && bun run --watch src/index.ts",
     "check": "tsc --noEmit",
     "test": "bun test",
     "db:migrate": "bunx --bun prisma migrate dev",
