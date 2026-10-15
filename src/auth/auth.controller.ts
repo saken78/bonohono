@@ -40,6 +40,10 @@ AuthController.post(
     return jsonOK(c, result);
   },
 );
+AuthController.post("/refresh", async (c: Context) => {
+  await authService.refresh(c);
+  return jsonOK(c, "Refreshed");
+});
 AuthController.use(AuthMiddleware);
 AuthController.get(
   "/me",

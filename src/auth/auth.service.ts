@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { deleteCookie, getSignedCookie, setSignedCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
-import { sign } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import { prismaService } from "../db/MariaDB";
 import { SECRET } from "../utils/secret";
 import { HttpStatus } from "../utils/status_code";
@@ -15,10 +15,11 @@ import {
 } from "./auth.model";
 import {
   ARGON2_TIME_COST,
-  COOKIE_MAX,
+  REFRESH_TOKEN_EXPIRY,
   COST,
-  JWT_EXPIRY_SECONDS,
+  ACCESS_TOKEN_EXPIRY,
 } from "@/utils/constants";
+import { tr } from "zod/locales";
 
 export const authService = {
   async register(req: RegisterUserRequest): Promise<AuthResponse> {
@@ -81,22 +82,39 @@ export const authService = {
     }
 
     const now = Math.floor(Date.now() / 1000);
-    const pay: JWT_PAYLOAD = {
+    const access_token_payload: JWT_PAYLOAD = {
       sub: result.id,
       email: result.email,
       role: result.role,
-      exp: now + JWT_EXPIRY_SECONDS,
+      exp: now + ACCESS_TOKEN_EXPIRY,
+      iat: now,
+    };
+    const refresh_token_payload: JWT_PAYLOAD = {
+      sub: result.id,
+      email: result.email,
+      role: result.role,
+      exp: now + REFRESH_TOKEN_EXPIRY,
       iat: now,
     };
 
-    const token = await sign(pay, SECRET);
-    await setSignedCookie(c, "refresh_token", token, SECRET, {
+    const access_token = await sign(access_token_payload, SECRET, "HS256");
+    await setSignedCookie(c, "access_token", access_token, SECRET, {
       httpOnly: true,
       secure: true,
       sameSite: "Lax",
       path: "/",
-      maxAge: COOKIE_MAX,
+      maxAge: ACCESS_TOKEN_EXPIRY,
     });
+
+    const refresh_token = await sign(refresh_token_payload, SECRET, "HS256");
+    await setSignedCookie(c, "refresh_token", refresh_token, SECRET, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Lax",
+      path: "/",
+      maxAge: REFRESH_TOKEN_EXPIRY,
+    });
+
     return {
       id: result.id,
       email: result.email,
@@ -104,6 +122,46 @@ export const authService = {
       last_name: result.last_name,
       role: result.role,
     };
+  },
+  async refresh(c: Context) {
+    const token = await getSignedCookie(c, SECRET, "refresh_token");
+    if (!token) {
+      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
+        message: "Invalid or expired refresh token",
+      });
+    }
+    const payload: JWT_PAYLOAD = await verify(token, SECRET, "HS256");
+    if (!payload.sub) {
+      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
+        message: "Invalid or expired refresh token",
+      });
+    }
+    const result = await prismaService.users.findUnique({
+      where: {
+        id: payload.sub,
+      },
+    });
+    if (!result) {
+      throw new HTTPException(HttpStatus.NOT_FOUND, {
+        message: "Users not found",
+      });
+    }
+    const now = Math.floor(Date.now() / 1000);
+    const access_token_payload: JWT_PAYLOAD = {
+      sub: result.id,
+      email: result.email,
+      role: result.role,
+      exp: now + ACCESS_TOKEN_EXPIRY,
+      iat: now,
+    };
+    const access_token = await sign(access_token_payload, SECRET, "HS256");
+    await setSignedCookie(c, "access_token", access_token, SECRET, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: ACCESS_TOKEN_EXPIRY,
+    });
   },
   async me(c: Context): Promise<JWT_RESPONSE> {
     const result = c.get("user");
