@@ -76,7 +76,7 @@ export type JobControllerResponse<T> = {
   data: T;
 };
 
-export type CreateSavedJobResponse = {
+export type SavedJobResponse = {
   id: string;
   job_id: string;
   user_id: string;

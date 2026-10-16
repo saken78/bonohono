@@ -5,9 +5,9 @@ import { prismaService } from "../db/MariaDB";
 import { HttpStatus } from "../utils/status_code";
 import { selectData } from "./job.helper";
 import {
-  type CreateSavedJobResponse,
   type GetJobResponse,
   type RegisterJobRequest,
+  type SavedJobResponse,
 } from "./job.model";
 
 export const jobService = {
@@ -108,10 +108,18 @@ export const jobService = {
   async CreateSavedJob(
     user_id: string,
     job_id: string,
-  ): Promise<CreateSavedJobResponse> {
+  ): Promise<SavedJobResponse> {
     const data = await prismaService.saved_jobs.create({
       data: {
         user_id: user_id,
+        job_id: job_id,
+      },
+    });
+    return data;
+  },
+  async GetSavedJobById(job_id: string): Promise<SavedJobResponse[]> {
+    const data = await prismaService.saved_jobs.findMany({
+      where: {
         job_id: job_id,
       },
     });

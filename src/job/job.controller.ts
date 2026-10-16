@@ -12,6 +12,7 @@ import {
   UPDATE_JOB_SCHEMA,
   type GetJobResponse,
   type JobControllerResponse,
+  type SavedJobResponse,
 } from "./job.model";
 import { jobService } from "./job.service";
 
@@ -116,25 +117,41 @@ JobController.put(
     return jsonOK(c, result);
   },
 );
-JobController.post("/:id/save", async (c: Context) => {
-  const job_id = c.req.param("id");
-  if (!job_id) {
-    throw new HTTPException(HttpStatus.BAD_REQUEST, {
-      message: "Param id undefined",
-    });
-  }
-  const user: JWT_RESPONSE = c.get("user");
-  const result = await jobService.CreateSavedJob(user.id, job_id);
-  return jsonCreated(c, result);
-});
+JobController.post(
+  "/:id/save",
+  async (
+    c: Context,
+  ): Promise<
+    JSONRespondReturn<JobControllerResponse<SavedJobResponse>, HttpStatus.OK>
+  > => {
+    const job_id = c.req.param("id");
+    if (!job_id) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Param id undefined",
+      });
+    }
+    const user: JWT_RESPONSE = c.get("user");
+    const result = await jobService.CreateSavedJob(user.id, job_id);
+    return jsonOK(c, result);
+  },
+);
 
-// JobController.get("/:id/save", async () => {
-//   const job_id = c.req.param("id");
-//   if (!job_id) {
-//     throw new HTTPException(HttpStatus.BAD_REQUEST,{
-//       message: "Param id undefined"
-//     })
-//   }
-// });
+JobController.get(
+  "/:id/save",
+  async (
+    c: Context,
+  ): Promise<
+    JSONRespondReturn<JobControllerResponse<SavedJobResponse[]>, HttpStatus.OK>
+  > => {
+    const job_id = c.req.param("id");
+    if (!job_id) {
+      throw new HTTPException(HttpStatus.BAD_REQUEST, {
+        message: "Param id undefined",
+      });
+    }
+    const result = await jobService.GetSavedJobById(job_id);
+    return jsonOK(c, result);
+  },
+);
 
 export default JobController;
