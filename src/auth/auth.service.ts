@@ -19,7 +19,6 @@ import {
   COST,
   ACCESS_TOKEN_EXPIRY,
 } from "@/utils/constants";
-import { tr } from "zod/locales";
 
 export const authService = {
   async register(req: RegisterUserRequest): Promise<AuthResponse> {
