@@ -1,21 +1,19 @@
+import { jsonCreated, jsonOK } from "@/lib/response";
+import { PosterMiddleware } from "@/middleware/poster.middleware";
 import { Hono, type Context } from "hono";
-import { jobService } from "./job.service";
-import { HttpStatus } from "../utils/status_code";
-import { AuthMiddleware } from "../middleware/auth.middleware";
 import { HTTPException } from "hono/http-exception";
 import type { JWT_RESPONSE } from "../auth/auth.model";
+import { AuthMiddleware } from "../middleware/auth.middleware";
 import type { JSONRespondReturn } from "../utils/json";
+import { HttpStatus } from "../utils/status_code";
 import {
-  UPDATE_JOB_SCHEMA,
-  type JobControllerResponse,
-  type GetJobResponse,
-  REGISTER_JOB_SCHEMA,
   GET_STATUS,
-  APPLY_JOB_SCHEMA,
-  type ApplyJobResponse,
+  REGISTER_JOB_SCHEMA,
+  UPDATE_JOB_SCHEMA,
+  type GetJobResponse,
+  type JobControllerResponse,
 } from "./job.model";
-import { PosterMiddleware } from "@/middleware/poster.middleware";
-import { TaskerMiddleware } from "@/middleware/tasker.middleware";
+import { jobService } from "./job.service";
 
 const JobController = new Hono();
 JobController.use("*", AuthMiddleware);
@@ -27,10 +25,7 @@ JobController.get(
     JSONRespondReturn<JobControllerResponse<GetJobResponse[]>, HttpStatus.OK>
   > => {
     const result: GetJobResponse[] = await jobService.GetAllJob();
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, result);
   },
 );
 JobController.get(
@@ -47,10 +42,7 @@ JobController.get(
       });
     }
     const result: GetJobResponse = await jobService.GetJobById(id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, result);
   },
 );
 JobController.use(PosterMiddleware);
@@ -65,10 +57,7 @@ JobController.post(
     const body = await c.req.json();
     const v = REGISTER_JOB_SCHEMA.parse(body);
     const result: GetJobResponse = await jobService.PostJob(v, user.id);
-    return c.json({
-      data: result,
-      status_code: HttpStatus.CREATED,
-    });
+    return jsonCreated(c, result);
   },
 );
 JobController.get(
@@ -95,10 +84,7 @@ JobController.get(
       id,
       v.status,
     );
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, result);
   },
 );
 JobController.put(
@@ -127,45 +113,28 @@ JobController.put(
       v.status,
       user.id,
     );
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
-    });
+    return jsonOK(c, result);
   },
 );
-JobController.use(TaskerMiddleware);
-JobController.post(
-  "/:id",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<JobControllerResponse<ApplyJobResponse>, HttpStatus.OK>
-  > => {
-    const id: string | undefined = c.req.param("id");
-    if (!id) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Param id undefined",
-      });
-    }
-    const body = await c.req.json();
-    if (!body) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Body status undefined",
-      });
-    }
-    const tasker: JWT_RESPONSE = c.get("user");
-    const v = APPLY_JOB_SCHEMA.parse(body);
-    const result = await jobService.ApplyJob(
-      id,
-      v.proposal,
-      v.proposed_budget,
-      tasker.id,
-    );
-    return c.json({
-      data: result,
-      status_code: HttpStatus.OK,
+JobController.post("/:id/save", async (c: Context) => {
+  const job_id = c.req.param("id");
+  if (!job_id) {
+    throw new HTTPException(HttpStatus.BAD_REQUEST, {
+      message: "Param id undefined",
     });
-  },
-);
+  }
+  const user: JWT_RESPONSE = c.get("user");
+  const result = await jobService.CreateSavedJob(user.id, job_id);
+  return jsonCreated(c, result);
+});
+
+// JobController.get("/:id/save", async () => {
+//   const job_id = c.req.param("id");
+//   if (!job_id) {
+//     throw new HTTPException(HttpStatus.BAD_REQUEST,{
+//       message: "Param id undefined"
+//     })
+//   }
+// });
 
 export default JobController;

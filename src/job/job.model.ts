@@ -74,5 +74,11 @@ export type GetJobResponse = {
 
 export type JobControllerResponse<T> = {
   data: T;
-  status_code: number;
+};
+
+export type CreateSavedJobResponse = {
+  id: string;
+  job_id: string;
+  user_id: string;
+  created_at: Date | null;
 };

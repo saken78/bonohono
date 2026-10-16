@@ -1,14 +1,14 @@
+import { DEFAULT_PAGE_SIZE } from "@/utils/constants";
 import { HTTPException } from "hono/http-exception";
 import type { jobs_status } from "../../generated/prisma/enums";
 import { prismaService } from "../db/MariaDB";
 import { HttpStatus } from "../utils/status_code";
 import { selectData } from "./job.helper";
 import {
-  type ApplyJobResponse,
+  type CreateSavedJobResponse,
   type GetJobResponse,
   type RegisterJobRequest,
 } from "./job.model";
-import { DEFAULT_PAGE_SIZE } from "@/utils/constants";
 
 export const jobService = {
   async GetAllJob(): Promise<GetJobResponse[]> {
@@ -105,72 +105,16 @@ export const jobService = {
     });
     return updated;
   },
-  async ApplyJob(
+  async CreateSavedJob(
+    user_id: string,
     job_id: string,
-    proposal: string,
-    proposal_budget: number | undefined,
-    tasker_id: string,
-  ): Promise<ApplyJobResponse> {
-    const job = await prismaService.jobs.findUnique({
-      where: {
-        id: job_id,
-      },
-      select: {
-        poster_id: true,
-        status: true,
-      },
-    });
-
-    if (!job) {
-      throw new HTTPException(HttpStatus.NOT_FOUND, {
-        message: "Job not found",
-      });
-    }
-
-    if (job.status !== "open") {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Cannot apply to a job that is not open",
-      });
-    }
-    const existingApplication = await prismaService.applications.findFirst({
-      where: {
-        job_id: job_id,
-        tasker_id: tasker_id,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (existingApplication) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "You have already applied to this job",
-      });
-    }
-
-    if (job.poster_id === tasker_id) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "You cannot apply to your own job",
-      });
-    }
-
-    const application = await prismaService.applications.create({
+  ): Promise<CreateSavedJobResponse> {
+    const data = await prismaService.saved_jobs.create({
       data: {
+        user_id: user_id,
         job_id: job_id,
-        tasker_id: tasker_id,
-        proposal: proposal,
-        proposed_budget: proposal_budget ?? null,
-      },
-      select: {
-        id: true,
-        job_id: true,
-        tasker_id: true,
-        proposal: true,
-        proposed_budget: true,
-        status: true,
-        created_at: true,
       },
     });
-    return application;
+    return data;
   },
 };
