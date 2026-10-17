@@ -1,52 +1,18 @@
 import { Hono, type Context } from "hono";
-import { HttpStatus } from "../utils/status_code";
-import { savedJobService } from "./saved_job.service";
+import { HTTPException } from "hono/http-exception";
+import type { JWT_RESPONSE } from "../auth/auth.model";
 import { AuthMiddleware } from "../middleware/auth.middleware";
+import type { JSONRespondReturn } from "../utils/json";
+import { HttpStatus } from "../utils/status_code";
 import type {
-  CreateJobRequest,
-  CreateSavedJobResponse,
   DeleteJobRequest,
   GetSavedJobResponse,
   SavedJobControllerResponse,
 } from "./saved_job.model";
-import type { JWT_RESPONSE } from "../auth/auth.model";
-import { HTTPException } from "hono/http-exception";
-import type { JSONRespondReturn } from "../utils/json";
+import { savedJobService } from "./saved_job.service";
 
 const SavedJobController = new Hono();
 SavedJobController.use("*", AuthMiddleware);
-SavedJobController.post(
-  "/",
-  async (
-    c: Context,
-  ): Promise<
-    JSONRespondReturn<
-      SavedJobControllerResponse<CreateSavedJobResponse>,
-      HttpStatus.CREATED
-    >
-  > => {
-    const job: CreateJobRequest = await c.req.json();
-    const user: JWT_RESPONSE = c.get("user");
-    if (!job) {
-      throw new HTTPException(HttpStatus.BAD_REQUEST, {
-        message: "Body job_id undefined",
-      });
-    }
-    if (!user.id) {
-      throw new HTTPException(HttpStatus.UNAUTHORIZED, {
-        message: "UNAUTHORIZED",
-      });
-    }
-    const result: CreateSavedJobResponse = await savedJobService.CreateSavedJob(
-      user.id,
-      job.job_id,
-    );
-    return c.json({
-      data: result,
-      status_code: HttpStatus.CREATED,
-    });
-  },
-);
 SavedJobController.get(
   "/",
   async (

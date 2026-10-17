@@ -1,9 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import { prismaService } from "../db/MariaDB";
-import type {
-  CreateSavedJobResponse,
-  GetSavedJobResponse,
-} from "./saved_job.model";
+import type { GetSavedJobResponse } from "./saved_job.model";
 import { HttpStatus } from "@/utils/status_code";
 
 export const savedJobService = {
@@ -63,16 +60,6 @@ ORDER BY sj.created_at DESC`;
   // ORDER BY sj.created_at DESC`;
   //     return jobs;
   //   },
-  async CreateSavedJob(
-    user_id: string,
-    job_id: string,
-  ): Promise<CreateSavedJobResponse> {
-    const job = await prismaService.saved_jobs.create({
-      data: { user_id: user_id, job_id: job_id },
-      select: { job_id: true },
-    });
-    return job;
-  },
   async DeleteSavedJob(user_id: string, job_id: string): Promise<void> {
     const result = await prismaService.saved_jobs.deleteMany({
       where: {
